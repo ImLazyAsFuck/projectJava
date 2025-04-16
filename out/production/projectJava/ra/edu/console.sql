@@ -13,8 +13,8 @@ CREATE TABLE Student (
                          name VARCHAR(100) NOT NULL,
                          dob DATE NOT NULL,
                          email VARCHAR(100) NOT NULL UNIQUE,
-                         sex BIT NOT NULL,
-                         phone VARCHAR(20) UNIQUE ,
+                         sex BIT NOT NULL, -- 1: Nam, 0: Nữ
+                         phone VARCHAR(20),
                          password VARCHAR(255) NOT NULL,
                          status enum('ACTIVE', 'INACTIVE', 'BLOCK'),
                          create_at DATE DEFAULT(NOW())
