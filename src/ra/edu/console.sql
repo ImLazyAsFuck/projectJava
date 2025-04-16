@@ -32,6 +32,7 @@ CREATE TABLE Enrollment (
                             id INT PRIMARY KEY AUTO_INCREMENT,
                             student_id INT NOT NULL,
                             course_id INT NOT NULL,
+                            e_status enum('WAITING', 'DENIED', 'CANCER', 'CONFIRM'),
                             registered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                             status ENUM('WAITING', 'DENIED', 'CANCER', 'CONFIRMED') DEFAULT 'WAITING',
                             FOREIGN KEY (student_id) REFERENCES Student(id),
