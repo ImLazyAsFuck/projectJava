@@ -11,7 +11,7 @@ public class StudentManagementUI{
             System.out.println("2. Add a new student");
             System.out.println("3. Edit student information (Show menu to select attribute to edit)");
             System.out.println("4. Delete a student (Soft delete from course)");
-            System.out.println("5. Search by name, email, or ID (one at a time)");
+            System.out.println("5. Search by name, email");
             System.out.println("6. Sort by ID (ascending/descending)");
             System.out.println("7. Return to main menu");
             System.out.print("Enter your choice: ");

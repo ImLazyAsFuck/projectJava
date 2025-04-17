@@ -1,5 +1,6 @@
 package ra.edu.validate;
 
+import ra.edu.utils.Input;
 import ra.edu.utils.PrintError;
 
 public class ChoiceValidator{
@@ -7,7 +8,7 @@ public class ChoiceValidator{
         while(true){
             try{
                 System.out.print(message);
-                int choice = Integer.parseInt(message);
+                int choice = Integer.parseInt(Input.input.nextLine());
                 if(choice > maxChoice || choice <= 0){
                     throw new Exception();
                 }

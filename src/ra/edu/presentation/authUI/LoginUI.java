@@ -21,8 +21,7 @@ public class LoginUI{
             System.out.println("2. Login as Student");
             System.out.println("3. Exit");
             System.out.println("==============================================");
-            System.out.print("Enter your choice: ");
-            choice = ChoiceValidator.validateChoice("Enter choice: ", 3);
+            choice = ChoiceValidator.validateChoice("Enter your choice: ", 3);
             switch (choice) {
                 case 1:
                     loginAsAdmin();
@@ -31,10 +30,10 @@ public class LoginUI{
                     loginAsStudent();
                     break;
                 case 3:
-                    System.out.println("Tạm biệt!");
+                    System.out.println("Good bye!");
                     break;
                 default:
-                    System.out.println("Lựa chọn không hợp lệ!");
+                    System.out.println("Please choose between 1 and 3!");
             }
         } while (choice != 3);
     }
@@ -44,6 +43,7 @@ public class LoginUI{
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
         Admin admin = null;
         admin = AUTH_SERVICE.loginAsAdmin(username, password);
+        System.out.println(admin);
         if (admin != null){
             Admin.currentUser = admin;
             showAdminMenu();

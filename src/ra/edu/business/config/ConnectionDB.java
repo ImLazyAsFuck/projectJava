@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionDB{
-    private final static String URL = "jdbc:mysql://localhost:3306/StudentAndCourseManagement";
+    private final static String URL = "jdbc:mysql://localhost:3306/student_and_course_management";
     private final static String USER = "root";
     private final static String PASSWORD = "a@1234";
 
