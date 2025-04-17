@@ -10,7 +10,7 @@ public class StringValidator{
         while(true){
             try{
                 System.out.print(message);
-                String newString = input.nextLine().trim();
+                String newString = Input.input.nextLine().trim();
                 if(newString.isEmpty()){
                     throw new IllegalArgumentException("String can't be empty");
                 }else if(newString.length() < lengthContain.getMinLength()){
@@ -19,8 +19,10 @@ public class StringValidator{
                     throw new IllegalArgumentException("String length must be less than " + lengthContain.getMaxLength() + " characters");
                 }
                 return newString;
-            }catch(Exception e){
+            }catch(IllegalArgumentException e){
                 PrintError.println(e.getMessage());
+            }catch(Exception e){
+                PrintError.println("Unknown exception! Please try again");
             }
         }
     }

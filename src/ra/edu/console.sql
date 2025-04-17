@@ -14,9 +14,9 @@ CREATE TABLE Student (
                          dob DATE NOT NULL,
                          email VARCHAR(100) NOT NULL UNIQUE,
                          sex BIT NOT NULL,
-                         phone VARCHAR(20) UNIQUE ,
+                         phone VARCHAR(20) ,
                          password VARCHAR(255) NOT NULL,
-                         status enum('ACTIVE', 'INACTIVE', 'BLOCK'),
+                         status enum('ACTIVE', 'INACTIVE', 'BLOCKED'),
                          create_at DATE DEFAULT(NOW())
 );
 

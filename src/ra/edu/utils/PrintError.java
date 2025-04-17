@@ -9,7 +9,7 @@ public class PrintError{
         System.out.println();
     }
 
-    public static <T> void print(T t){
-        System.out.print("\u001B[31m" + t + "\u001B[0m");
+    public static void print(Object obj){
+        System.out.print("\u001B[31m" + String.valueOf(obj) + "\u001B[0m");
     }
 }
