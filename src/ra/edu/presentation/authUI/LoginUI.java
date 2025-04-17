@@ -1,15 +1,14 @@
-package ra.edu.presentation;
+package ra.edu.presentation.authUI;
 
 import ra.edu.business.model.LengthContain;
 import ra.edu.business.model.User.Admin;
 import ra.edu.business.model.User.Student;
 import ra.edu.business.service.authService.AuthService;
 import ra.edu.business.service.authService.AuthServiceImp;
-import ra.edu.utils.Input;
 import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.StringValidator;
 
-import static ra.edu.presentation.AdminUI.showAdminMenu;
+import static ra.edu.presentation.adminUI.AdminUI.showAdminMenu;
 
 public class LoginUI{
     private final static AuthService AUTH_SERVICE = new AuthServiceImp();

@@ -1,10 +1,8 @@
-package ra.edu.presentation;
+package ra.edu.presentation.adminUI;
 
-import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
 import ra.edu.validate.ChoiceValidator;
 
-import static ra.edu.presentation.CourseManagementUI.showCourseMenu;
+import static ra.edu.presentation.adminUI.CourseManagementUI.showCourseMenu;
 
 public class AdminUI{
     public static void showAdminMenu() {
@@ -30,12 +28,12 @@ public class AdminUI{
                 case 4:
                     break;
                 case 5:
-                    System.out.println("Đăng xuất thành công.");
-                    break;
+                    System.out.println("Logout successful!");
+                    return;
                 default:
                     System.out.println("Lựa chọn không hợp lệ!");
             }
-        } while (choice != 5);
+        } while (true);
     }
 
 

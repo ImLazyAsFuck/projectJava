@@ -1,12 +1,10 @@
-package ra.edu.presentation;
+package ra.edu.presentation.adminUI;
 
-import ra.edu.business.model.LengthContain;
 import ra.edu.business.model.course.Course;
 import ra.edu.business.service.courseService.CourseService;
 import ra.edu.business.service.courseService.CourseServiceImp;
 import ra.edu.utils.PrintError;
 import ra.edu.validate.ChoiceValidator;
-import ra.edu.validate.IntegerValidator;
 
 public class CourseManagementUI{
     private final static CourseService COURSE_SERVICE = new CourseServiceImp();
@@ -47,11 +45,11 @@ public class CourseManagementUI{
                     break;
                 case 7:
                     System.out.println("Quay về menu Admin.");
-                    break;
+                    return;
                 default:
                     System.out.println("Lựa chọn không hợp lệ!");
             }
-        } while (choice != 7);
+        } while (true);
     }
 
     public static void displayCourse() {
