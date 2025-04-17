@@ -1,15 +1,11 @@
 package ra.edu.presentation;
 
-import ra.edu.business.service.courseService.CourseService;
-import ra.edu.business.service.courseService.CourseServiceImp;
-import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
 import ra.edu.validate.ChoiceValidator;
 
 import static ra.edu.presentation.AdminUI.showAdminMenu;
 
 public class LoginUI{
-    private final static CourseService COURSE_SERVICE = new CourseServiceImp();
+
 
     public static void displayLoginMenu(){
         int choice;

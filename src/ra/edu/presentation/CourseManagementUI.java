@@ -1,10 +1,19 @@
 package ra.edu.presentation;
 
-import ra.edu.utils.Input;
+import ra.edu.business.model.LengthContain;
+import ra.edu.business.model.course.Course;
+import ra.edu.business.service.courseService.CourseService;
+import ra.edu.business.service.courseService.CourseServiceImp;
 import ra.edu.utils.PrintError;
 import ra.edu.validate.ChoiceValidator;
+import ra.edu.validate.IntegerValidator;
 
 public class CourseManagementUI{
+    private final static CourseService COURSE_SERVICE = new CourseServiceImp();
+    private final static int PAGE_SIZE = 10;
+    private final static int FIRST_PAGE = 10;
+
+    private static int currentPage = 1;
     public static void showCourseMenu() {
         int choice;
         do {
@@ -25,8 +34,10 @@ public class CourseManagementUI{
                     displayCourse();
                     break;
                 case 2:
+                    addNewCourse();
                     break;
                 case 3:
+                    updateCourse();
                     break;
                 case 4:
                     break;
@@ -44,7 +55,28 @@ public class CourseManagementUI{
     }
 
     public static void displayCourse() {
-        
+        if(COURSE_SERVICE.findPage(FIRST_PAGE, PAGE_SIZE).isEmpty()){
+            System.out.println("Course list ís empty.");
+            return;
+        }
+        COURSE_SERVICE.findAll().forEach(System.out::println);
     }
 
+    public static void addNewCourse() {
+        Course course = new Course();
+        course.inputData();
+        if(COURSE_SERVICE.save(course)){
+            System.out.println("Course added.");
+        }else{
+            PrintError.println("Course cannot be added because course already exists.");
+        };
+    }
+
+    public static void updateCourse() {
+        Course course = new Course();
+        course.inputData();
+        if(COURSE_SERVICE.update(course)){
+            System.out.println("Course updated.");
+        }
+    }
 }

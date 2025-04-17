@@ -124,6 +124,11 @@ public class CourseDaoImp implements CourseDAO {
 
             cs.execute();
             int returnCode = cs.getInt(6);
+            if(returnCode == 1){
+                System.out.println("Some course name is duplicate");
+            }else if(returnCode == 2){
+                System.out.println("Not found course");
+            }
             return returnCode == 0;
 
         } catch (SQLException e) {
