@@ -299,7 +299,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-55" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;CourseManagerDAOImp&lt;/span&gt;&lt;/div&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=32;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="570" y="990" width="290" height="214" as="geometry" />
+          <mxGeometry x="570" y="990" width="290" height="188" as="geometry" />
         </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-56" value="+ findAll(): List&amp;lt;Course&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-55" vertex="1">
           <mxGeometry y="32" width="290" height="26" as="geometry" />
@@ -316,11 +316,8 @@
         <mxCell id="zlpquRdz48AsANumm2sr-60" value="+ save(Course course): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-55" vertex="1">
           <mxGeometry y="136" width="290" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="zlpquRdz48AsANumm2sr-61" value="+ findCourseById(String id): Course" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-55" vertex="1">
-          <mxGeometry y="162" width="290" height="26" as="geometry" />
-        </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-62" value="+ sortCourseByName(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-55" vertex="1">
-          <mxGeometry y="188" width="290" height="26" as="geometry" />
+          <mxGeometry y="162" width="290" height="26" as="geometry" />
         </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-64" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" parent="1" source="zlpquRdz48AsANumm2sr-37" target="MJI2ajQQupjb3d7geVpr-5" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">
@@ -330,7 +327,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-65" value="&lt;div&gt;&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;CourseManagerService&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=32;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="951" y="990" width="290" height="214" as="geometry" />
+          <mxGeometry x="951" y="990" width="290" height="188" as="geometry" />
         </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-66" value="+ findAll(): List&amp;lt;Course&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-65" vertex="1">
           <mxGeometry y="32" width="290" height="26" as="geometry" />
@@ -347,14 +344,11 @@
         <mxCell id="zlpquRdz48AsANumm2sr-70" value="+ save(Course course): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-65" vertex="1">
           <mxGeometry y="136" width="290" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="zlpquRdz48AsANumm2sr-71" value="+ findCourseById(String id): Course" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-65" vertex="1">
+        <mxCell id="zlpquRdz48AsANumm2sr-72" value="+ sortCourseByName(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-65" vertex="1">
           <mxGeometry y="162" width="290" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="zlpquRdz48AsANumm2sr-72" value="+ sortCourseByName(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-65" vertex="1">
-          <mxGeometry y="188" width="290" height="26" as="geometry" />
-        </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-73" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;CourseManagerServiceImp&lt;/span&gt;&lt;/div&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=32;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="951" y="720" width="290" height="214" as="geometry" />
+          <mxGeometry x="951" y="720" width="290" height="188" as="geometry" />
         </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-74" value="+ findAll(): List&amp;lt;Course&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-73" vertex="1">
           <mxGeometry y="32" width="290" height="26" as="geometry" />
@@ -371,11 +365,8 @@
         <mxCell id="zlpquRdz48AsANumm2sr-78" value="+ save(Course course): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-73" vertex="1">
           <mxGeometry y="136" width="290" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="zlpquRdz48AsANumm2sr-79" value="+ findCourseById(String id): Course" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-73" vertex="1">
-          <mxGeometry y="162" width="290" height="26" as="geometry" />
-        </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-80" value="+ sortCourseByName(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zlpquRdz48AsANumm2sr-73" vertex="1">
-          <mxGeometry y="188" width="290" height="26" as="geometry" />
+          <mxGeometry y="162" width="290" height="26" as="geometry" />
         </mxCell>
         <mxCell id="zlpquRdz48AsANumm2sr-82" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" parent="1" source="zlpquRdz48AsANumm2sr-65" target="zlpquRdz48AsANumm2sr-55" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">

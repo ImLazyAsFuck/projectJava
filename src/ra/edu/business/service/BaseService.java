@@ -1,10 +1,10 @@
-package ra.edu.business.dao;
+package ra.edu.business.service;
 
 import ra.edu.business.model.Pagination;
 
 import java.util.List;
 
-public interface BaseDAO<T>{
+public interface BaseService<T>{
     List<T> findAll();
     boolean save(T t);
     boolean update(T t);
