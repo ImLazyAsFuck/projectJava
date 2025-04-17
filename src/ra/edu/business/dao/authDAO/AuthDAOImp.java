@@ -68,6 +68,6 @@ public class AuthDAOImp implements AuthDAO{
 
     @Override
     public Student changePassword(String username, String newPassword){
-        return false;
+        return null;
     }
 }

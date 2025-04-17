@@ -5,7 +5,7 @@ import ra.edu.business.dao.authDAO.AuthDAOImp;
 import ra.edu.business.model.User.Admin;
 import ra.edu.business.model.User.Student;
 
-public class AuthServiceImp implements AuthDAO{
+public class AuthServiceImp implements AuthService{
     private final static AuthDAO authDAO = new AuthDAOImp();
     @Override
     public Admin loginAsAdmin(String username, String password){
