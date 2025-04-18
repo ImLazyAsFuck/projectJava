@@ -1,6 +1,5 @@
 package ra.edu.validate;
 
-import ra.edu.business.model.student.StudentStatus;
 import ra.edu.utils.Input;
 import ra.edu.utils.PrintError;
 
@@ -45,29 +44,4 @@ public class StudentValidator{
         }
     }
 
-    public static StudentStatus validateStudentStatus(String message){
-        while(true){
-            try{
-                System.out.print(message);
-                String newStatus = Input.input.nextLine().trim();
-                if(!newStatus.isEmpty()){
-                    throw new IllegalArgumentException("Status can't be empty");
-                }
-                switch(newStatus.toLowerCase()){
-                    case "active":
-                        return StudentStatus.ACTIVE;
-                    case "inactive":
-                        return StudentStatus.INACTIVE;
-                    case "blocked":
-                        return StudentStatus.BLOCKED;
-                    default:
-                        throw new IllegalArgumentException("Invalid status! Please enter ACTIVE or INACTIVE or BLOCKED");
-                }
-            }catch(IllegalArgumentException e){
-                PrintError.println(e.getMessage());
-            }catch(Exception e){
-                PrintError.println("Unknown exception! Please try again");
-            }
-        }
-    }
 }

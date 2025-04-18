@@ -1,5 +1,7 @@
 package ra.edu.presentation.adminUI;
 
+import ra.edu.utils.PrintError;
+import ra.edu.utils.PrintSuccess;
 import ra.edu.validate.ChoiceValidator;
 
 import static ra.edu.presentation.adminUI.CourseManagementUI.showCourseMenu;
@@ -15,7 +17,6 @@ public class AdminUI{
             System.out.println("4. Statistics by Course");
             System.out.println("5. Logout");
             System.out.println("================================");
-            System.out.print("Enter your choice: ");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 5);
             switch (choice) {
                 case 1:
@@ -28,10 +29,10 @@ public class AdminUI{
                 case 4:
                     break;
                 case 5:
-                    System.out.println("Logout successful!");
+                    PrintSuccess.println("Logout successful!");
                     return;
                 default:
-                    System.out.println("Lựa chọn không hợp lệ!");
+                    PrintError.println("Invalid choice! Please choose either 1 or 5!");
             }
         } while (true);
     }

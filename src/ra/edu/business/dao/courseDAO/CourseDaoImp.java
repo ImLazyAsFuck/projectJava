@@ -11,14 +11,14 @@ import java.util.List;
 
 public class CourseDaoImp implements CourseDAO {
     @Override
-    public Course findbyName(String name) {
+    public Course findbyId(int id) {
         Course course = null;
         Connection con = null;
         CallableStatement cs = null;
         try {
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call findbyName(?)}");
-            cs.setString(1, name);
+            cs = con.prepareCall("{call find_course_by_id(?)}");
+            cs.setInt(1, id);
             ResultSet rs = cs.executeQuery();
             if (rs.next()) {
                 course = new Course();
@@ -41,10 +41,101 @@ public class CourseDaoImp implements CourseDAO {
         return course;
     }
 
+    @Override
+    public Pagination<Course> searchByName(String name, int page, int pageSize) {
+        Pagination<Course> pagination = new Pagination<>();
+        List<Course> list = new ArrayList<>();
+
+        if (page < 1) {
+            page = 1;
+        }
+
+        try (Connection con = ConnectionDB.openConnection();
+             CallableStatement cs = con.prepareCall("{call find_courses_by_name(?, ?, ?, ?)}")) {
+
+            cs.setString(1, name);
+            cs.setInt(2, page);
+            cs.setInt(3, pageSize);
+            cs.registerOutParameter(4, Types.INTEGER);
+
+            boolean hasResultSet = cs.execute();
+            if (hasResultSet) {
+                try (ResultSet rs = cs.getResultSet()) {
+                    while (rs.next()) {
+                        Course course = new Course();
+                        course.setId(rs.getInt("c_id"));
+                        course.setName(rs.getString("c_name"));
+                        course.setDuration(rs.getInt("c_duration"));
+                        course.setDescription(rs.getString("c_description"));
+                        course.setInstructor(rs.getString("c_instructor"));
+
+                        Timestamp ts = rs.getTimestamp("c_created_at");
+                        if (ts != null) {
+                            course.setCreatedAt(ts.toLocalDateTime());
+                        }
+                        list.add(course);
+                    }
+                }
+            }
+
+            int totalItems = cs.getInt(4);
+            int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+            if (page > totalPages && totalPages > 0) {
+                page = totalPages;
+            }
+            if (totalPages == 0) {
+                page = 1;
+            }
+
+            pagination.setTotalItems(totalItems);
+            pagination.setTotalPages(totalPages);
+            pagination.setCurrentPage(page);
+            pagination.setPageSize(pageSize);
+            pagination.setItems(list);
+
+        } catch (SQLException e) {
+            PrintError.println("Error while fetching course page: " + e.getMessage());
+        } catch (Exception e) {
+            PrintError.println("Unknown error while fetching course page: " + e.getMessage());
+        }
+
+        return pagination;
+    }
+
 
     @Override
     public List<Course> sortCourseByName(boolean typeSort){
-        return List.of();
+        List<Course> list = new ArrayList<>();
+        Connection con = null;
+        CallableStatement cs = null;
+        try {
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call sort_course_by_name(?)}}");
+            cs.setString(1, typeSort ? "asc" : "desc");
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                Course course = new Course();
+                course.setId(rs.getInt("c_id"));
+                course.setName(rs.getString("c_name"));
+                course.setDuration(rs.getInt("c_duration"));
+                course.setDescription(rs.getString("c_description"));
+                course.setInstructor(rs.getString("c_instructor"));
+
+                Timestamp ts = rs.getTimestamp("c_created_at");
+                if (ts != null) {
+                    course.setCreatedAt(ts.toLocalDateTime());
+                }
+
+                list.add(course);
+            }
+        } catch (SQLException e) {
+            PrintError.println("Error while fetching all courses: " + e.getMessage());
+        }catch(Exception e){
+            PrintError.println("Unknown error while saving course: " + e.getMessage());
+        }
+        ConnectionDB.closeConnection(con, cs);
+        return list;
     }
 
     @Override
@@ -86,25 +177,22 @@ public class CourseDaoImp implements CourseDAO {
         CallableStatement cs = null;
         try {
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call insert_course(?, ?, ?, ?, ?, ?)}");
+            cs = con.prepareCall("{call insert_course(?, ?, ?, ?)}");
             cs.setString(1, course.getName());
             cs.setInt(2, course.getDuration());
             cs.setString(3, course.getDescription());
             cs.setString(4, course.getInstructor());
-            cs.setTimestamp(5, Timestamp.valueOf(course.getCreatedAt()));
-            cs.registerOutParameter(6, Types.INTEGER);
 
-            cs.execute();
-            int returnCode = cs.getInt(6);
-            return returnCode == 0;
-
+            cs.executeUpdate();
+            ConnectionDB.closeConnection(con, cs);
+            return true;
         } catch (SQLException e) {
             PrintError.println("Error while saving course: " + e.getMessage());
+            return false;
         } catch(Exception e){
             PrintError.println("Unknown error while saving course: " + e.getMessage());
+            return false;
         }
-        ConnectionDB.closeConnection(con, cs);
-        return false;
     }
 
 
@@ -142,40 +230,93 @@ public class CourseDaoImp implements CourseDAO {
 
 
     @Override
-    public boolean delete(Course course){
-        return false;
+    public boolean delete(int id) {
+        Connection con = null;
+        CallableStatement cs = null;
+        try {
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{ call delete_course(?, ?) }");
+            cs.setInt(1, id);
+            cs.registerOutParameter(2, Types.INTEGER);
+            cs.execute();
+
+            int returnCode = cs.getInt(2);
+
+            if (returnCode == 0) {
+                return true;
+            } else if (returnCode == 1) {
+                PrintError.println("Not found course wth ID: " + id);
+            } else if (returnCode == 2) {
+                PrintError.println("Cannot delete course because it has registered students.");
+            } else {
+                throw new Exception();
+            }
+            ConnectionDB.closeConnection(con, cs);
+            return false;
+        } catch (SQLException e) {
+            PrintError.println("Error while delete course " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            PrintError.println("Unknown error while delete course " + e.getMessage());
+            return false;
+        }
     }
 
-    @Override
-    public List<Course> findPage(int page, int size) {
-        List<Course> list = new ArrayList<>();
-        try (Connection con = ConnectionDB.openConnection();
-             CallableStatement cs = con.prepareCall("{call find_courses_by_page(?, ?)}")) {
 
+    @Override
+    public Pagination<Course> findPage(int page, int size){
+    Pagination<Course> pagination = new Pagination<>();
+        List<Course> list = new ArrayList<>();
+        Connection con = null;
+        CallableStatement cs = null;
+        try {
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call find_courses_by_page(?, ?, ?)}");
             cs.setInt(1, page);
             cs.setInt(2, size);
-            ResultSet rs = cs.executeQuery();
+            cs.registerOutParameter(3, Types.INTEGER);
+            boolean hasResultSet = cs.execute();
+            if(hasResultSet){
+                ResultSet rs = cs.getResultSet();
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("c_id"));
+                    course.setName(rs.getString("c_name"));
+                    course.setDuration(rs.getInt("c_duration"));
+                    course.setDescription(rs.getString("c_description"));
+                    course.setInstructor(rs.getString("c_instructor"));
 
-            while (rs.next()) {
-                Course course = new Course();
-                course.setId(rs.getInt("c_id"));
-                course.setName(rs.getString("c_name"));
-                course.setDuration(rs.getInt("c_duration"));
-                course.setDescription(rs.getString("c_description"));
-                course.setInstructor(rs.getString("c_instructor"));
-
-                Timestamp ts = rs.getTimestamp("c_created_at");
-                if (ts != null) {
-                    course.setCreatedAt(ts.toLocalDateTime());
+                    Timestamp ts = rs.getTimestamp("c_created_at");
+                    if (ts != null) {
+                        course.setCreatedAt(ts.toLocalDateTime());
+                    }
+                    list.add(course);
                 }
-
-                list.add(course);
             }
+            int totalItems = cs.getInt(3);
+            int totalPages = (int) Math.ceil((double) totalItems / size);
+
+            if (page > totalPages && totalPages > 0) {
+                page = totalPages;
+            }
+            if(totalPages == 0){
+                page = 1;
+            }
+
+            pagination.setTotalItems(totalItems);
+            pagination.setTotalPages(totalPages);
+            pagination.setCurrentPage(page);
+            pagination.setPageSize(size);
+            pagination.setItems(list);
 
         } catch (SQLException e) {
             PrintError.println("Error while fetching course page: " + e.getMessage());
+        }catch(Exception e){
+            PrintError.println("Unknown error while fetching course page: " + e.getMessage());
         }
-        return list;
+        ConnectionDB.closeConnection(con, cs);
+        return pagination;
     }
 
+//    public
 }

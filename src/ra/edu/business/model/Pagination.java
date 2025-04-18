@@ -1,21 +1,33 @@
 package ra.edu.business.model;
 
+import ra.edu.utils.PrintError;
+
 import java.util.List;
 
-public abstract class Pagination<T>{
+public class Pagination<T>{
     private List<T> items;
-    private int currentPage;
+    private int currentPage = 1;
     private int totalPages;
     private int totalItems;
+    private int pageSize = 5;
 
-    public Pagination(List<T> items, int currentPage, int totalPages, int totalItems){
+    public Pagination(List<T> items, int currentPage, int totalPages, int totalItems, int pageSize){
         this.items = items;
         this.currentPage = currentPage;
         this.totalPages = totalPages;
         this.totalItems = totalItems;
+        this.pageSize = pageSize;
     }
 
     public Pagination(){
+    }
+
+    public int getPageSize(){
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize){
+        this.pageSize = pageSize;
     }
 
     public List<T> getItems(){
@@ -30,7 +42,10 @@ public abstract class Pagination<T>{
         return currentPage;
     }
 
-    public void setCurrentPage(int currentPage){
+    public void setCurrentPage(int currentPage) {
+        if (currentPage < 1 || currentPage > totalPages) {
+            PrintError.println("Invalid page number! Please enter between 1 and " + totalPages);
+        }
         this.currentPage = currentPage;
     }
 

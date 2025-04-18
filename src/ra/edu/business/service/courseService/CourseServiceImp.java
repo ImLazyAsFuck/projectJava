@@ -2,6 +2,7 @@ package ra.edu.business.service.courseService;
 
 import ra.edu.business.dao.courseDAO.CourseDAO;
 import ra.edu.business.dao.courseDAO.CourseDaoImp;
+import ra.edu.business.model.Pagination;
 import ra.edu.business.model.course.Course;
 
 import java.util.List;
@@ -9,8 +10,13 @@ import java.util.List;
 public class CourseServiceImp implements CourseService {
     private final static CourseDAO COURSE_DAO = new CourseDaoImp();
     @Override
-    public Course findbyName(String name){
-        return COURSE_DAO.findbyName(name);
+    public Course findbyId(int id){
+        return COURSE_DAO.findbyId(id);
+    }
+
+    @Override
+    public Pagination<Course> searchByName(String name, int page, int pageSize){
+        return COURSE_DAO.searchByName(name,page,pageSize);
     }
 
     @Override
@@ -34,12 +40,12 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public boolean delete(Course course){
-        return COURSE_DAO.delete(course);
+    public boolean delete(int id){
+        return COURSE_DAO.delete(id);
     }
 
     @Override
-    public List<Course> findPage(int page, int size){
+    public Pagination<Course> findPage(int page, int size){
         return COURSE_DAO.findPage(page, size);
     }
 }

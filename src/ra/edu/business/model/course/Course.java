@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Course implements Inputable{
-    private static int idSequence = 0;
     private int id;
     private String name;
     private int duration;
@@ -18,8 +17,7 @@ public class Course implements Inputable{
     private String instructor;
     private LocalDateTime createdAt;
 
-    public Course(String name, int duration, String description, String instructor, LocalDateTime createdAt){
-        this.id = ++idSequence;
+    public Course(int id, String name, int duration, String description, String instructor, LocalDateTime createdAt){
         this.name = name;
         this.duration = duration;
         this.description = description;
@@ -28,7 +26,6 @@ public class Course implements Inputable{
     }
 
     public Course(){
-        this.id = ++idSequence;
     }
 
     public int getId(){
@@ -107,8 +104,8 @@ public class Course implements Inputable{
     @Override
     public String toString() {
         return String.format(
-                "%-20s | %-8d | %-30s | %-20s | %-20s",
-                name, duration, description, instructor, createdAt.toString()
+                "|%-10s | %-40s | %-20s | %-70s | %-20s | %-20s|%n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+                id, name, duration, description, instructor, createdAt.toString()
         );
     }
 }

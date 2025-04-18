@@ -1,14 +1,15 @@
 package ra.edu.presentation.authUI;
 
+import ra.edu.business.model.Account.Account;
 import ra.edu.business.model.LengthContain;
-import ra.edu.business.model.User.Admin;
-import ra.edu.business.model.User.Student;
 import ra.edu.business.service.authService.AuthService;
 import ra.edu.business.service.authService.AuthServiceImp;
+import ra.edu.presentation.adminUI.AdminUI;
+import ra.edu.presentation.studentUI.StudentUI;
+import ra.edu.utils.PrintError;
+import ra.edu.utils.PrintSuccess;
 import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.StringValidator;
-
-import static ra.edu.presentation.adminUI.AdminUI.showAdminMenu;
 
 public class LoginUI{
     private final static AuthService AUTH_SERVICE = new AuthServiceImp();
@@ -41,27 +42,24 @@ public class LoginUI{
     public static void loginAsAdmin(){
         String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
-        Admin admin = null;
-        admin = AUTH_SERVICE.loginAsAdmin(username, password);
-        System.out.println(admin);
-        if (admin != null){
-            Admin.currentUser = admin;
-            showAdminMenu();
+        Account account = AUTH_SERVICE.loginAsAdmin(username, password);
+        if (account != null) {
+            PrintSuccess.println("Logged in successfully!");
+            AdminUI.showAdminMenu();
         }else{
-            System.out.println("Username or password is incorrect!");
+            PrintError.println("Incorrect username or password!");
         }
     }
 
     public static void loginAsStudent(){
         String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
-        Student student = null;
-        student = AUTH_SERVICE.loginAsStudent(username, password);
-        if (student != null){
-            Student.currentUser = student;
-//            showAdminMenu();
+        Account account = AUTH_SERVICE.loginAsStudent(username, password);
+        if (account != null) {
+            PrintSuccess.println("Logged in successfully!");
+            StudentUI.studentMainMenu();
         }else{
-            System.out.println("Username or password is incorrect!");
+            PrintError.println("Incorrect username or password!");
         }
     }
 }

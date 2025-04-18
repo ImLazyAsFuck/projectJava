@@ -2,30 +2,34 @@ drop database if exists student_and_course_management;
 create database student_and_course_management;
 use student_and_course_management;
 
-create table admin (
-                       a_id int primary key auto_increment,
-                       a_username varchar(50) not null unique,
-                       a_password varchar(255) not null
+create table account (
+                         a_id int primary key auto_increment,
+                         a_username varchar(50) not null unique,
+                         a_password varchar(255) not null,
+                         a_status enum('ACTIVE', 'INACTIVE', 'BLOCKED') default('ACTIVE'),
+                         a_role enum('ADMIN', 'STUDENT')
 );
 
 create table student (
                          s_id int primary key auto_increment,
                          s_username varchar(50) not null unique,
                          s_password varchar(255) not null,
-                         s_status enum('ACTIVE', 'INACTIVE', 'BLOCKED'),
+                         a_id int not null,
                          s_full_name varchar(100) not null,
                          s_dob date not null,
                          s_email varchar(100) not null unique,
                          s_sex bit not null,
                          s_phone varchar(20),
-                         s_created_at datetime default current_timestamp
+                         s_created_at datetime default current_timestamp,
+                         foreign key (a_id) references account(a_id)
 );
 
 create table course (
                         c_id int primary key auto_increment,
-                        c_name varchar(100) not null unique,
+                        c_name varchar(100) not null,
                         c_duration int not null,
                         c_description varchar(255),
+                        c_status enum('ACTIVE', 'INACTIVE', 'DELETE'),
                         c_instructor varchar(100) not null,
                         c_created_at datetime default current_timestamp
 );
@@ -41,19 +45,10 @@ create table enrollment (
 );
 
 delimiter //
-create procedure loginAsAdmin(in_u_name varchar(50), in_u_password varchar(255))
+create procedure login(in_u_name varchar(50), in_u_password varchar(255))
 begin
-    select a.a_id, a.a_username, a.a_password from admin a
+    select a.a_id, a.a_username, a.a_password, a_status, a.a_role from account a
     where a.a_username = in_u_name and a.a_password = in_u_password;
-end;
-delimiter //
-
-
-delimiter //
-create procedure loginAsStudent(in_u_name varchar(50), in_u_password varchar(255))
-begin
-    select s.s_id, s.s_username, s.s_password from student s
-    where s.s_username = in_u_name and s.s_password = in_u_password;
 end;
 delimiter //
 
@@ -67,11 +62,15 @@ delimiter //
 delimiter //
 create procedure find_courses_by_page(
     in page_number int,
-    in page_size int
+    in page_size int,
+    out totalItems int
 )
 begin
     declare offset_value int;
+
     set offset_value = (page_number - 1) * page_size;
+
+    select count(c_id) into totalItems from course;
 
     select c_id, c_name, c_duration, c_description, c_instructor, c_created_at
     from course
@@ -88,19 +87,11 @@ create procedure insert_course(
     in p_name varchar(100),
     in p_duration int,
     in p_description varchar(255),
-    in p_instructor varchar(100),
-    out return_code int
+    in p_instructor varchar(100)
 )
 begin
-    declare existing_count int;
-    select count(*) into existing_count from course where c_name = p_name;
-    if existing_count > 0 then
-        set return_code = 1;
-    else
-        insert into course(c_name, c_duration, c_description, c_instructor)
-        values (p_name, p_duration, p_description, p_instructor);
-        set return_code = 0;
-    end if;
+    insert into course(c_name, c_duration, c_description, c_instructor)
+    values (p_name, p_duration, p_description, p_instructor);
 end;
 delimiter //
 
@@ -139,3 +130,71 @@ begin
 end //
 
 delimiter ;
+
+delimiter //
+create procedure delete_course(in_id int, out return_code int)
+begin
+    declare student_count int;
+
+    if exists (select 1 from course where c_id = in_id) then
+        select count(*) into student_count
+        from enrollment
+        where c_id = in_id;
+
+        if student_count = 0 then
+            delete from course where c_id = in_id;
+            set return_code = 0;
+        else
+            set return_code = 2;
+        end if;
+    else
+        set return_code = 1;
+    end if;
+end;
+delimiter //
+
+delimiter //
+create procedure find_course_by_id(id int)
+begin
+    select c_id, c_name, c_duration, c_description, c_instructor, c_created_at from course
+    where c_id = id;
+end;
+delimiter //
+
+delimiter //
+create procedure find_courses_by_name(
+    in in_name varchar(100),
+    in page_number int,
+    in page_size int,
+    out totalItems int
+)
+begin
+    declare offset_value int;
+
+    set offset_value = (page_number - 1) * page_size;
+
+    select count(c_id) into totalItems from course;
+
+    select c_id, c_name, c_duration, c_description, c_instructor, c_created_at
+    from course
+    where in_name = c_name
+    order by c_created_at desc
+    limit offset_value, page_size;
+end;
+delimiter //
+
+DELIMITER //
+CREATE PROCEDURE sort_course_by_name(IN sort_type ENUM('asc', 'desc'))
+BEGIN
+    IF sort_type = 'asc' THEN
+        SELECT c_id, c_name, c_duration, c_description, c_instructor, c_created_at
+        FROM course
+        ORDER BY c_name ASC;
+    ELSE
+        SELECT c_id, c_name, c_duration, c_description, c_instructor, c_created_at
+        FROM course
+        ORDER BY c_name DESC;
+    END IF;
+END;
+//
+DELIMITER ;

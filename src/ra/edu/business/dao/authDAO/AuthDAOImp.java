@@ -1,8 +1,9 @@
 package ra.edu.business.dao.authDAO;
 
 import ra.edu.business.config.ConnectionDB;
-import ra.edu.business.model.User.Admin;
-import ra.edu.business.model.User.Student;
+import ra.edu.business.model.Account.Account;
+import ra.edu.business.model.Account.AccountStatus;
+import ra.edu.business.model.Account.Role;
 import ra.edu.utils.PrintError;
 
 import java.sql.CallableStatement;
@@ -13,21 +14,36 @@ import java.sql.SQLException;
 public class AuthDAOImp implements AuthDAO{
 
     @Override
-    public Admin loginAsAdmin(String username, String password){
+    public Account loginAsAdmin(String username, String password){
         Connection con = null;
         CallableStatement cs = null;
-        Admin admin = null;
+        Account admin = null;
         try{
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call loginAsAdmin(?,?)}");
+            cs = con.prepareCall("{call login(?,?)}");
             cs.setString(1, username);
             cs.setString(2, password);
             ResultSet rs = cs.executeQuery();
             if(rs.next()){
-                admin = new Admin();
+                admin = new Account();
                 admin.setId(rs.getInt("a_id"));
                 admin.setUsername(rs.getString("a_username"));
                 admin.setPassword(rs.getString("a_password"));
+                admin.setStatus(AccountStatus.valueOf(rs.getString("a_status")));
+                admin.setRole(Role.valueOf(rs.getString("a_role")));
+            }
+            if(admin == null){
+                return null;
+            }
+            if(admin.getRole() == Role.STUDENT){
+                PrintError.println("You don't have permission to login this account here!");
+                return null;
+            }else if(admin.getStatus() == AccountStatus.INACTIVE){
+                PrintError.println("Your account has been inactive!");
+                return null;
+            }else if(admin.getStatus() == AccountStatus.BLOCKED){
+                PrintError.println("Your account has been blocked!");
+                return null;
             }
             return admin;
         }catch(SQLException e){
@@ -40,21 +56,36 @@ public class AuthDAOImp implements AuthDAO{
     }
 
     @Override
-    public Student loginAsStudent(String username, String password){
+    public Account loginAsStudent(String username, String password){
         Connection con = null;
         CallableStatement cs = null;
-        Student student = null;
+        Account student = null;
         try{
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call loginAsStudent(?,?)}");
+            cs = con.prepareCall("{call login(?,?)}");
             cs.setString(1, username);
             cs.setString(2, password);
             ResultSet rs = cs.executeQuery();
             if(rs.next()){
-                student = new Student();
-                student.setId(rs.getInt("s_id"));
-                student.setUsername(rs.getString("s_username"));
-                student.setPassword(rs.getString("s_password"));
+                student = new Account();
+                student.setId(rs.getInt("a_id"));
+                student.setUsername(rs.getString("a_username"));
+                student.setPassword(rs.getString("a_password"));
+                student.setStatus(AccountStatus.valueOf(rs.getString("a_status")));
+                student.setRole(Role.valueOf(rs.getString("a_role")));
+            }
+            if(student == null){
+                return null;
+            }
+            if(student.getRole() == Role.ADMIN){
+                PrintError.println("You don't have permission to login this account here!");
+                return null;
+            }else if(student.getStatus() == AccountStatus.INACTIVE){
+                PrintError.println("Your account has been inactive!");
+                return null;
+            }else if(student.getStatus() == AccountStatus.BLOCKED){
+                PrintError.println("Your account has been blocked!");
+                return null;
             }
             return student;
         }catch(SQLException e){
@@ -67,7 +98,7 @@ public class AuthDAOImp implements AuthDAO{
     }
 
     @Override
-    public Student changePassword(String username, String newPassword){
+    public Account changePassword(String username, String newPassword){
         return null;
     }
 }

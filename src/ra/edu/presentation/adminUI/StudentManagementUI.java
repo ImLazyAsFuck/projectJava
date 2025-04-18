@@ -1,6 +1,8 @@
 package ra.edu.presentation.adminUI;
 
 import ra.edu.utils.Input;
+import ra.edu.utils.PrintError;
+import ra.edu.validate.ChoiceValidator;
 
 public class StudentManagementUI{
     public static void displayStudentManagement(){
@@ -14,8 +16,7 @@ public class StudentManagementUI{
             System.out.println("5. Search by name, email");
             System.out.println("6. Sort by ID (ascending/descending)");
             System.out.println("7. Return to main menu");
-            System.out.print("Enter your choice: ");
-            choice = Input.input.nextInt();
+            choice = ChoiceValidator.validateChoice("Enter choice: ", 7);
             switch (choice) {
                 case 1:
                     System.out.println("Displaying the list of students...");
@@ -39,8 +40,10 @@ public class StudentManagementUI{
                     System.out.println("Returning to main menu");
                     return;
                 default:
-                    System.out.println("Invalid choice! Try again!");
+                    PrintError.println("Invalid choice! Try again!");
             }
         } while (true);
     }
+
+
 }
