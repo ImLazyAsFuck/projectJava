@@ -2,7 +2,7 @@ package ra.edu.validate;
 
 import ra.edu.business.model.Account.AccountStatus;
 import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 public class AccountValidator{
     public static AccountStatus validateStudentStatus(String message){

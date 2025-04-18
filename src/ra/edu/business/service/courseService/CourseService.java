@@ -10,4 +10,5 @@ public interface CourseService extends BaseService<Course>{
     Course findbyId(int id);
     Pagination<Course> searchByName(String name, int page, int pageSize);
     List<Course> sortCourseByName(boolean typeSort);
+    boolean isNameUnique(String name);
 }

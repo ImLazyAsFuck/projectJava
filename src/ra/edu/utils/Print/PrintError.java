@@ -1,4 +1,4 @@
-package ra.edu.utils;
+package ra.edu.utils.Print;
 
 public class PrintError{
     public static void println(Object obj){

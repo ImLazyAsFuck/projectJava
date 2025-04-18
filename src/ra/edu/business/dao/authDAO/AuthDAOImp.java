@@ -4,7 +4,7 @@ import ra.edu.business.config.ConnectionDB;
 import ra.edu.business.model.Account.Account;
 import ra.edu.business.model.Account.AccountStatus;
 import ra.edu.business.model.Account.Role;
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

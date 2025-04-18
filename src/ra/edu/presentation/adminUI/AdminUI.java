@@ -1,7 +1,7 @@
 package ra.edu.presentation.adminUI;
 
-import ra.edu.utils.PrintError;
-import ra.edu.utils.PrintSuccess;
+import ra.edu.utils.Print.PrintError;
+import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.validate.ChoiceValidator;
 
 import static ra.edu.presentation.adminUI.CourseManagementUI.showCourseMenu;
@@ -18,6 +18,7 @@ public class AdminUI{
             System.out.println("5. Logout");
             System.out.println("================================");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 5);
+            System.out.println();
             switch (choice) {
                 case 1:
                     showCourseMenu();

@@ -1,7 +1,6 @@
 package ra.edu.presentation.studentUI;
 
-import ra.edu.utils.Input;
-import ra.edu.utils.PrintSuccess;
+import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.validate.ChoiceValidator;
 
 public class StudentUI{

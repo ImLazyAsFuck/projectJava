@@ -1,7 +1,8 @@
 package ra.edu.validate;
 
+import ra.edu.business.model.LengthContain;
 import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 public class StudentValidator{
     public static String emailValidate(String message, String regex){
@@ -44,4 +45,24 @@ public class StudentValidator{
         }
     }
 
+    public static String studentNameValidate(String message, LengthContain lengthContain){
+        while(true){
+            try{
+                System.out.print(message);
+                String newString = Input.input.nextLine().trim().replace("\\s+", " ");
+                if(newString.isEmpty()){
+                    throw new IllegalArgumentException("Course name can't be empty");
+                }else if(newString.length() < lengthContain.getMinLength()){
+                    throw new IllegalArgumentException("Course name length must be at least " + lengthContain.getMinLength() + " characters");
+                }else if(newString.length() > lengthContain.getMaxLength()){
+                    throw new IllegalArgumentException("Course name length must be less than " + lengthContain.getMaxLength() + " characters");
+                }
+                return newString;
+            }catch(IllegalArgumentException e){
+                PrintError.println(e.getMessage());
+            }catch(Exception e){
+                PrintError.println("Unknown exception! Please try again");
+            }
+        }
+    }
 }

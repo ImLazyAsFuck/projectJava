@@ -3,7 +3,7 @@ package ra.edu.business.dao.courseDAO;
 import ra.edu.business.config.ConnectionDB;
 import ra.edu.business.model.Pagination;
 import ra.edu.business.model.course.Course;
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -136,6 +136,27 @@ public class CourseDaoImp implements CourseDAO {
         }
         ConnectionDB.closeConnection(con, cs);
         return list;
+    }
+
+    @Override
+    public boolean isNameUnique(String name){
+        Connection con = null;
+        CallableStatement cs = null;
+        try{
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call is_name_unique(?)}");
+            cs.setString(1, name);
+            ResultSet rs = cs.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+            ConnectionDB.closeConnection(con, cs);
+        }catch(SQLException e){
+            PrintError.println("Error while fetching course name: " + e.getMessage());
+        }catch(Exception e){
+            PrintError.println("Unknown error while fetching course name: " + e.getMessage());
+        }
+        return false;
     }
 
     @Override

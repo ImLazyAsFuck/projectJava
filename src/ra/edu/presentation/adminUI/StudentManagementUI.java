@@ -1,7 +1,6 @@
 package ra.edu.presentation.adminUI;
 
-import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 import ra.edu.validate.ChoiceValidator;
 
 public class StudentManagementUI{

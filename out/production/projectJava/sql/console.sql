@@ -7,13 +7,11 @@ create table account (
                          a_username varchar(50) not null unique,
                          a_password varchar(255) not null,
                          a_status enum('ACTIVE', 'INACTIVE', 'BLOCKED') default('ACTIVE'),
-                         a_role enum('ADMIN', 'STUDENT')
+                         a_role enum('ADMIN', 'STUDENT') default('STUDENT')
 );
 
 create table student (
                          s_id int primary key auto_increment,
-                         s_username varchar(50) not null unique,
-                         s_password varchar(255) not null,
                          a_id int not null,
                          s_full_name varchar(100) not null,
                          s_dob date not null,
@@ -26,7 +24,7 @@ create table student (
 
 create table course (
                         c_id int primary key auto_increment,
-                        c_name varchar(100) not null,
+                        c_name varchar(100) not null unique,
                         c_duration int not null,
                         c_description varchar(255),
                         c_status enum('ACTIVE', 'INACTIVE', 'DELETE'),
@@ -108,11 +106,11 @@ create procedure update_course(
 begin
     declare course_exists int;
     declare name_conflict int;
-    select count(*) into course_exists from course where c_id = p_id;
+    select count(c_id) into course_exists from course where c_id = p_id;
     if course_exists = 0 then
         set return_code = 2;
     else
-        select count(*) into name_conflict from course
+        select count(c_id) into name_conflict from course
         where c_name = p_name and c_id != p_id;
 
         if name_conflict > 0 then

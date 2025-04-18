@@ -6,16 +6,16 @@ import ra.edu.business.model.course.Course;
 import ra.edu.business.service.courseService.CourseService;
 import ra.edu.business.service.courseService.CourseServiceImp;
 import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
-import ra.edu.utils.PrintSuccess;
+import ra.edu.utils.Print.PrintError;
+import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.validate.*;
 
 public class CourseManagementUI{
     private final static CourseService COURSE_SERVICE = new CourseServiceImp();
-    private final static int PAGE_SIZE = 10;
+    private final static int PAGE_SIZE = 5;
     private final static int FIRST_PAGE = 1;
 
-    private static int currentPage = 1;
+    private static int currentPage = FIRST_PAGE;
     public static void showCourseMenu() {
         int choice;
         do {
@@ -26,10 +26,10 @@ public class CourseManagementUI{
             System.out.println("4. Delete course (with confirmation)");
             System.out.println("5. Search by name (have pagination)");
             System.out.println("6. Sort by name (ascending/descending)");
-            System.out.println("7. Return to admin menu");
+            System.out.println("7. Return to management menu");
             System.out.println("======================================");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 7);
-
+            System.out.println();
             switch (choice) {
                 case 1:
                     displayCourse();
@@ -65,11 +65,12 @@ public class CourseManagementUI{
         System.out.print("Enter course name to search: ");
         String searchName = Input.input.nextLine().trim();
 
-        int currentPage = FIRST_PAGE;
+        currentPage = FIRST_PAGE;
         Pagination<Course> firstPage = COURSE_SERVICE.searchByName(searchName, FIRST_PAGE, PAGE_SIZE);
 
         if (firstPage.getItems().isEmpty()) {
             PrintError.println("No courses found for name: " + searchName);
+            System.out.println();
             return;
         }
 
@@ -77,7 +78,6 @@ public class CourseManagementUI{
 
         while (true) {
             Pagination<Course> coursePage = COURSE_SERVICE.searchByName(searchName, currentPage, PAGE_SIZE);
-            System.out.println("Total Pages: " + totalPage);
             System.out.println("=".repeat(200));
             System.out.printf("|%-10s | %-40s | %-20s | %-70s | %-20s | %-20s|%n",
                     "Course Id", "Course Name", "Duration", "Description", "Instructor", "Created At");
@@ -137,7 +137,7 @@ public class CourseManagementUI{
             PrintError.println("Course not found!");
             return;
         }
-        boolean confirmation = BooleanValidator.validateBoolean("Do you sure to delete this course?");
+        boolean confirmation = BooleanValidator.validateBoolean("Do you sure to delete this course?(true/false): ");
         if (!confirmation) {
             PrintSuccess.println("Course deletion canceled.");
             return;
@@ -191,9 +191,9 @@ public class CourseManagementUI{
             return;
         }
         int totalPage = firstPage.getTotalPages();
+        currentPage = FIRST_PAGE;
         while(true){
             Pagination<Course> coursePage = COURSE_SERVICE.findPage(currentPage, PAGE_SIZE);
-            System.out.println(totalPage);
             System.out.println("=".repeat(200));
             System.out.printf("|%-10s | %-40s | %-20s | %-70s | %-20s | %-20s|%n",
                     "Course Id", "Course Name", "Duration", "Description", "Instructor", "Created At");
@@ -208,7 +208,7 @@ public class CourseManagementUI{
             System.out.printf("Page %d/%d%n", currentPage, totalPage);
             printPagination(currentPage, totalPage);
 
-            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.prev", "2.choose page", "3.next", "4.exit");
+            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.Prev", "2.Choose", "3.Next", "4.Exit");
 
             int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
             switch (subChoice) {
@@ -216,15 +216,20 @@ public class CourseManagementUI{
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
+                        System.out.println();
                         PrintError.println("You are already on the first page.");
+                        System.out.println();
                     }
                     break;
                 case 2:
+                    System.out.println();
                     int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
                     if (pageChoice >= 1 && pageChoice <= totalPage) {
                         currentPage = pageChoice;
                     } else {
+                        System.out.println();
                         PrintError.println("Invalid page number.");
+                        System.out.println();
                     }
                     break;
                 case 3:
@@ -232,13 +237,16 @@ public class CourseManagementUI{
                         currentPage++;
                     } else {
                         PrintError.println("You are already on the last page.");
+                        System.out.println();
                     }
                     break;
                 case 4:
                     PrintSuccess.println("Exiting choice page");
+                    System.out.println();
                     return;
                 default:
                     PrintError.println("Invalid choice. Please choose between 1, 2, 3 and 4.");
+                    System.out.println();
             }
         }
     }
@@ -342,12 +350,12 @@ public class CourseManagementUI{
             PrintError.println("Course list is empty.");
             return;
         }
-        boolean typeSort = BooleanValidator.validateBoolean("Enter sort type(true is asc or false is desc):");
+        boolean typeSort = BooleanValidator.validateBoolean("Enter sort type(true is asc or false is desc): ");
         System.out.println("=".repeat(200));
         System.out.printf("|%-10s | %-40s | %-20s | %-70s | %-20s | %-20s|%n",
                 "Course Id", "Course Name", "Duration", "Description", "Instructor", "Created At");
         System.out.println("-".repeat(200));
-        COURSE_SERVICE.findAll().forEach(course ->
+        COURSE_SERVICE.sortCourseByName(typeSort).forEach(course ->
                 System.out.printf("|%-10d | %-40s | %-20d | %-70s | %-20s | %-20s|%n",
                         course.getId(), course.getName(), course.getDuration(),
                         course.getDescription(), course.getInstructor(),

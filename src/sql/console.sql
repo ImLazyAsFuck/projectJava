@@ -7,13 +7,11 @@ create table account (
                          a_username varchar(50) not null unique,
                          a_password varchar(255) not null,
                          a_status enum('ACTIVE', 'INACTIVE', 'BLOCKED') default('ACTIVE'),
-                         a_role enum('ADMIN', 'STUDENT')
+                         a_role enum('ADMIN', 'STUDENT') default('STUDENT')
 );
 
 create table student (
                          s_id int primary key auto_increment,
-                         s_username varchar(50) not null unique,
-                         s_password varchar(255) not null,
                          a_id int not null,
                          s_full_name varchar(100) not null,
                          s_dob date not null,
@@ -26,7 +24,7 @@ create table student (
 
 create table course (
                         c_id int primary key auto_increment,
-                        c_name varchar(100) not null,
+                        c_name varchar(100) not null unique,
                         c_duration int not null,
                         c_description varchar(255),
                         c_status enum('ACTIVE', 'INACTIVE', 'DELETE'),
@@ -108,11 +106,11 @@ create procedure update_course(
 begin
     declare course_exists int;
     declare name_conflict int;
-    select count(*) into course_exists from course where c_id = p_id;
+    select count(c_id) into course_exists from course where c_id = p_id;
     if course_exists = 0 then
         set return_code = 2;
     else
-        select count(*) into name_conflict from course
+        select count(c_id) into name_conflict from course
         where c_name = p_name and c_id != p_id;
 
         if name_conflict > 0 then
@@ -199,3 +197,61 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+delimiter //
+create procedure is_name_unique(in_name varchar(100))
+begin
+    select (c_id) from course
+    where c_name = in_name;
+end;
+delimiter //
+
+delimiter //
+create procedure is_email_exists(in_email varchar(100))
+begin
+    select (s_id) from student
+    where s_email = in_email;
+end;
+delimiter //
+
+delimiter //
+create procedure find_all_student()
+begin
+    select s_id, a_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at from student;
+end;
+delimiter //
+
+delimiter //
+create procedure find_student_by_page(page int, size int, totalItems int)
+begin
+    declare offset_value int;
+
+    set offset_value = (page - 1) * size;
+
+    select count(s_id) into totalItems from student;
+
+    select s_id, a_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
+    from student
+    order by s_created_at desc
+    limit offset_value, size;
+end;
+delimiter //
+
+delimiter //
+# create procedure create_student()
+delimiter //
+
+delimiter //
+# create procedure update_student(id int)
+# begin
+#     update student
+#         set
+# end;
+delimiter //
+
+# delimiter //
+# create procedure delete_student(id int)
+# begin
+#
+# end;
+# delimiter //

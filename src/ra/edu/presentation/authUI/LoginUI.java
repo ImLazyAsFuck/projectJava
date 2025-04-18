@@ -6,8 +6,8 @@ import ra.edu.business.service.authService.AuthService;
 import ra.edu.business.service.authService.AuthServiceImp;
 import ra.edu.presentation.adminUI.AdminUI;
 import ra.edu.presentation.studentUI.StudentUI;
-import ra.edu.utils.PrintError;
-import ra.edu.utils.PrintSuccess;
+import ra.edu.utils.Print.PrintError;
+import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.StringValidator;
 
@@ -23,6 +23,7 @@ public class LoginUI{
             System.out.println("3. Exit");
             System.out.println("==============================================");
             choice = ChoiceValidator.validateChoice("Enter your choice: ", 3);
+            System.out.println();
             switch (choice) {
                 case 1:
                     loginAsAdmin();
@@ -44,10 +45,14 @@ public class LoginUI{
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
         Account account = AUTH_SERVICE.loginAsAdmin(username, password);
         if (account != null) {
+            System.out.println();
             PrintSuccess.println("Logged in successfully!");
+            System.out.println();
             AdminUI.showAdminMenu();
         }else{
+            System.out.println();
             PrintError.println("Incorrect username or password!");
+            System.out.println();
         }
     }
 

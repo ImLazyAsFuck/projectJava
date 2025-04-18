@@ -1,4 +1,4 @@
-package ra.edu.utils;
+package ra.edu.utils.Print;
 
 public class PrintSuccess{
     public static void println(Object obj) {

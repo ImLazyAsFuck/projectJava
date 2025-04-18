@@ -90,7 +90,8 @@ public class Course implements Inputable{
     }
 
     public String inputCourseDescription(){
-        return StringValidator.validate("Enter the course description: ", new LengthContain(0, 255));
+        System.out.print("Enter the course description: ");
+        return Input.input.nextLine();
     }
 
     public String inputCourseInstructor(){

@@ -25,6 +25,11 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
+    public boolean isNameUnique(String name){
+        return COURSE_DAO.isNameUnique(name);
+    }
+
+    @Override
     public List<Course> findAll(){
         return COURSE_DAO.findAll();
     }

@@ -1,6 +1,6 @@
 package ra.edu.business.model;
 
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package ra.edu.validate;
 
 import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

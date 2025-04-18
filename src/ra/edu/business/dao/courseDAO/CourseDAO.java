@@ -12,4 +12,6 @@ public interface CourseDAO extends BaseDAO<Course>{
     Pagination<Course> searchByName(String name,  int page, int pageSize);
 
     List<Course> sortCourseByName(boolean typeSort);
+
+    boolean isNameUnique(String name);
 }

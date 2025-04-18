@@ -1,6 +1,6 @@
 package ra.edu.business.config;
 
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

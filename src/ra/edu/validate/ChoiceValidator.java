@@ -1,7 +1,7 @@
 package ra.edu.validate;
 
 import ra.edu.utils.Input;
-import ra.edu.utils.PrintError;
+import ra.edu.utils.Print.PrintError;
 
 public class ChoiceValidator{
     public static int validateChoice(String message, int maxChoice) {
