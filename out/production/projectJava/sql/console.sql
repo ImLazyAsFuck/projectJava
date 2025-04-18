@@ -161,27 +161,28 @@ begin
 end;
 delimiter //
 
-delimiter //
-create procedure find_courses_by_name(
-    in in_name varchar(100),
-    in page_number int,
-    in page_size int,
-    out totalItems int
+DELIMITER //
+
+CREATE PROCEDURE find_courses_by_name(
+    IN in_name VARCHAR(100),
+    IN page_number INT,
+    IN page_size INT,
+    OUT totalItems INT
 )
-begin
-    declare offset_value int;
+BEGIN
+    DECLARE offset_value INT;
+    SET offset_value = (page_number - 1) * page_size;
+    SELECT COUNT(c_id) INTO totalItems
+    FROM course
+    WHERE LOWER(c_name) LIKE CONCAT('%', LOWER(in_name), '%');
+    SELECT c_id, c_name, c_duration, c_description, c_instructor, c_created_at
+    FROM course
+    WHERE LOWER(c_name) LIKE CONCAT('%', LOWER(in_name), '%')
+    ORDER BY c_created_at DESC
+    LIMIT page_size OFFSET offset_value;
+END //
 
-    set offset_value = (page_number - 1) * page_size;
-
-    select count(c_id) into totalItems from course;
-
-    select c_id, c_name, c_duration, c_description, c_instructor, c_created_at
-    from course
-    where in_name = c_name
-    order by c_created_at desc
-    limit offset_value, page_size;
-end;
-delimiter //
+DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE sort_course_by_name(IN sort_type ENUM('asc', 'desc'))

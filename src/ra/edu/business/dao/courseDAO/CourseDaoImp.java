@@ -111,7 +111,7 @@ public class CourseDaoImp implements CourseDAO {
         CallableStatement cs = null;
         try {
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call sort_course_by_name(?)}}");
+            cs = con.prepareCall("{call sort_course_by_name(?)}");
             cs.setString(1, typeSort ? "asc" : "desc");
             ResultSet rs = cs.executeQuery();
             while (rs.next()) {
