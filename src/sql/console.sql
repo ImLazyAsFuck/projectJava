@@ -6,8 +6,8 @@ create table account (
                          a_id int primary key auto_increment,
                          a_username varchar(50) not null unique,
                          a_password varchar(255) not null,
-                         a_status enum('ACTIVE', 'INACTIVE', 'BLOCKED') default('ACTIVE'),
-                         a_role enum('ADMIN', 'STUDENT') default('STUDENT')
+                         a_status enum('ACTIVE', 'INACTIVE', 'BLOCKED') not null default('ACTIVE'),
+                         a_role enum('ADMIN', 'STUDENT')  not null default('STUDENT')
 );
 
 create table student (
@@ -18,7 +18,7 @@ create table student (
                          s_email varchar(100) not null unique,
                          s_sex bit not null,
                          s_phone varchar(20),
-                         s_created_at datetime default current_timestamp,
+                         s_created_at datetime default(current_timestamp),
                          foreign key (a_id) references account(a_id)
 );
 
@@ -29,7 +29,7 @@ create table course (
                         c_description varchar(255),
                         c_status enum('ACTIVE', 'INACTIVE', 'DELETE'),
                         c_instructor varchar(100) not null,
-                        c_created_at datetime default current_timestamp
+                        c_created_at datetime default(current_timestamp)
 );
 
 create table enrollment (
@@ -237,17 +237,20 @@ begin
 end;
 delimiter //
 
-delimiter //
+# delimiter //
 # create procedure create_student()
-delimiter //
+# begin
+#
+# end;
+# delimiter //
 
-delimiter //
+# delimiter //
 # create procedure update_student(id int)
 # begin
 #     update student
 #         set
 # end;
-delimiter //
+# delimiter //
 
 # delimiter //
 # create procedure delete_student(id int)

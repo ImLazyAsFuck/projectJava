@@ -9,15 +9,14 @@ public class Student implements Inputable{
     private LocalDate dob;
     private boolean sex;
     private String phone;
-    private LocalDate createdAt;
+    private String email;
 
-
-    public Student(String fullName, LocalDate dob, boolean sex, String phone, LocalDate createdAt){
+    public Student(String fullName, LocalDate dob, boolean sex, String phone, String email){
         this.fullName = fullName;
         this.dob = dob;
         this.sex = sex;
         this.phone = phone;
-        this.createdAt = createdAt;
+        this.email = email;
     }
 
     public Student(){
