@@ -3,8 +3,12 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/ra/edu/business/dao/authDAO/AuthDAOImp.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/ra/edu/business/dao/courseDAO/CourseDaoImp.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/ra/edu/business/dao/studentDAO/StudentDAOImp.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/01_create_tables.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/02_auth_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/03_course_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/04_student_management.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/sql/accountTest.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/sql/console.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/sql/courseTest.sql" dialect="MySQL" />
   </component>
 </project>

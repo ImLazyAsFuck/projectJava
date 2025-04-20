@@ -16,6 +16,7 @@ public class StudentValidator{
                 if(!newEmail.matches(regex)){
                     throw new IllegalArgumentException("Invalid email! Please enter a email like a@domain.com");
                 }
+
                 return newEmail;
             }catch(IllegalArgumentException e){
                 PrintError.println(e.getMessage());

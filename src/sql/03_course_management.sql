@@ -1,54 +1,4 @@
-drop database if exists student_and_course_management;
-create database student_and_course_management;
-use student_and_course_management;
-
-create table account (
-                         a_id int primary key auto_increment,
-                         a_username varchar(50) not null unique,
-                         a_password varchar(255) not null,
-                         a_status enum('ACTIVE', 'INACTIVE', 'BLOCKED') not null default('ACTIVE'),
-                         a_role enum('ADMIN', 'STUDENT')  not null default('STUDENT')
-);
-
-create table student (
-                         s_id int primary key auto_increment,
-                         a_id int not null,
-                         s_full_name varchar(100) not null,
-                         s_dob date not null,
-                         s_email varchar(100) not null unique,
-                         s_sex bit not null,
-                         s_phone varchar(20),
-                         s_created_at datetime default(current_timestamp),
-                         foreign key (a_id) references account(a_id)
-);
-
-create table course (
-                        c_id int primary key auto_increment,
-                        c_name varchar(100) not null unique,
-                        c_duration int not null,
-                        c_description varchar(255),
-                        c_status enum('ACTIVE', 'INACTIVE', 'DELETE'),
-                        c_instructor varchar(100) not null,
-                        c_created_at datetime default(current_timestamp)
-);
-
-create table enrollment (
-                            e_id int primary key auto_increment,
-                            s_id int not null,
-                            c_id int not null,
-                            e_status enum('WAITING', 'DENIED', 'CANCER', 'CONFIRMED') default 'WAITING',
-                            e_registered_at datetime default current_timestamp,
-                            foreign key (s_id) references student(s_id),
-                            foreign key (c_id) references course(c_id)
-);
-
-delimiter //
-create procedure login(in_u_name varchar(50), in_u_password varchar(255))
-begin
-    select a.a_id, a.a_username, a.a_password, a_status, a.a_role from account a
-    where a.a_username = in_u_name and a.a_password = in_u_password;
-end;
-delimiter //
+use project_java;
 
 delimiter //
 create procedure find_all_course()
@@ -199,62 +149,10 @@ END;
 DELIMITER ;
 
 delimiter //
-create procedure is_name_unique(in_name varchar(100))
+create procedure is_course_name_unique(in_name varchar(100))
 begin
     select (c_id) from course
     where c_name = in_name;
 end;
 delimiter //
 
-delimiter //
-create procedure is_email_exists(in_email varchar(100))
-begin
-    select (s_id) from student
-    where s_email = in_email;
-end;
-delimiter //
-
-delimiter //
-create procedure find_all_student()
-begin
-    select s_id, a_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at from student;
-end;
-delimiter //
-
-delimiter //
-create procedure find_student_by_page(page int, size int, totalItems int)
-begin
-    declare offset_value int;
-
-    set offset_value = (page - 1) * size;
-
-    select count(s_id) into totalItems from student;
-
-    select s_id, a_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
-    from student
-    order by s_created_at desc
-    limit offset_value, size;
-end;
-delimiter //
-
-# delimiter //
-# create procedure create_student()
-# begin
-#
-# end;
-# delimiter //
-
-# delimiter //
-# create procedure update_student(id int)
-# begin
-#     update student
-#         set
-# end;
-# delimiter //
-
-# delimiter //
-# create procedure delete_student(id int)
-# begin
-#
-# end;
-# delimiter //
