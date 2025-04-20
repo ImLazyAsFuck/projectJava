@@ -1,9 +1,10 @@
 use project_java;
 
 delimiter //
+drop procedure if exists is_email_exists;
 create procedure is_email_exists(in_email varchar(100))
 begin
-    select (s_id) from student
+    select count(s_id) as email_count from student
     where s_email = in_email;
 end;
 delimiter //
@@ -16,7 +17,8 @@ end;
 delimiter //
 
 delimiter //
-create procedure find_student_by_page(page int, size int, totalItems int)
+drop procedure if exists find_student_by_page;
+create procedure find_student_by_page(page int, size int, out totalItems int)
 begin
     declare offset_value int;
 
@@ -32,22 +34,25 @@ end;
 delimiter //
 
 delimiter //
+drop table if exists create_student;
 create procedure create_student(
-    in_username varchar(50),
-    in_password varchar(255),
-    in_fullname varchar(100),
-    in_dob date,
-    in_email varchar(100),
-    in_sex bit,
-    in_phone varchar(20)
+    in in_username varchar(50),
+    in in_password varchar(255),
+    in in_fullname varchar(100),
+    in in_dob date,
+    in in_email varchar(100),
+    in in_sex bit,
+    in in_phone varchar(20)
 )
 begin
     declare new_a_id int;
+
     insert into account(a_username, a_password)
     values (in_username, in_password);
 
-    select a_id into new_a_id from account
-    where in_username = a_username;
+    select a_id into new_a_id
+    from account
+    where a_username = in_username;
 
     insert into student(
         a_id,
@@ -56,20 +61,24 @@ begin
         s_dob,
         s_sex,
         s_phone
-    ) values (new_a_id,
-              in_fullname,
-              in_email,
-              in_dob,
-              in_sex,
-              in_phone);
-
+    ) values (
+                 new_a_id,
+                 in_fullname,
+                 in_email,
+                 in_dob,
+                 in_sex,
+                 in_phone
+             );
 end;
 delimiter //
 
+
 delimiter //
+drop procedure if exists update_student;
 create procedure update_student(
     in_id int,
     in_full_name varchar(100),
+    in_email varchar(100),
     in_dob date,
     in_phone varchar(20),
     in_sex bit
@@ -80,7 +89,8 @@ begin
         s_full_name = in_full_name,
         s_phone = in_phone,
         s_dob = in_dob,
-        s_sex = in_sex
+        s_sex = in_sex,
+        s_email = in_email
     where s_id = in_id;
 end;
 delimiter //
@@ -100,6 +110,29 @@ begin
 
     if account_id is not null then
         update account set a_status = 'BLOCKED' where a_id = account_id;
+        set return_code = 0;
+    else
+        set return_code = 1;
+    end if;
+end;
+
+delimiter //
+
+delimiter //
+
+create procedure unblock_student(
+    in id int,
+    out return_code int
+)
+begin
+    declare account_id int default null;
+
+    select a_id into account_id
+    from student
+    where s_id = id;
+
+    if account_id is not null then
+        update account set a_status = 'ACTIVE' where a_id = account_id;
         set return_code = 0;
     else
         set return_code = 1;
@@ -166,17 +199,62 @@ begin
 end;
 delimiter //
 
+
 delimiter //
+create procedure is_student_blocked(
+    in in_id int,
+    out return_code int
+)
+begin
+    declare v_status enum('ACTIVE', 'INACTIVE', 'BLOCKED');
+
+    select a.a_status into v_status
+    from student s
+             join account a on s.a_id = a.a_id
+    where s.s_id = in_id;
+
+    if v_status is null then
+        set return_code = -1;
+    elseif v_status = 'BLOCKED' then
+        set return_code = 1;
+    else
+        set return_code = 0;
+    end if;
+end;
+delimiter //
+
+delimiter //
+drop procedure if exists sort_student_by_name;
 create procedure sort_student_by_name(type_sort bit)
 begin
-    select
-        s_id,
-        s_full_name,
-        s_dob,
-        s_email,
-        s_sex,
-        s_phone,
-        s_created_at from student
-        order by s_full_name;
+    if type_sort = 0 then
+        select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
+        from student
+        order by s_full_name asc;
+    elseif type_sort = 1 then
+        select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
+        from student
+        order by s_full_name desc;
+    else
+        select 'Invalid type_sort value' as error_message;
+    end if;
+end;
+delimiter //
+
+delimiter //
+drop procedure if exists sort_student_by_email;
+create procedure sort_student_by_email(type_sort bit)
+begin
+    if type_sort = 0 then
+        select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
+        from student
+        order by s_email asc;
+    elseif type_sort = 1 then
+        select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
+        from student
+        order by s_email desc;
+    else
+        select 'Invalid type_sort value' as error_message;
+    end if;
 end;
 delimiter //

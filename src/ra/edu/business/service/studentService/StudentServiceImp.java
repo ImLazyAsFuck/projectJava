@@ -9,35 +9,55 @@ import ra.edu.business.model.student.Student;
 import java.util.List;
 
 public class StudentServiceImp implements StudentService{
-    private final static StudentDAO studentDAO = new StudentDAOImp();
+    private final static StudentDAO STUDENT_DAO = new StudentDAOImp();
     @Override
     public Student findById(int id){
-        return studentDAO.findById(id);
+        return STUDENT_DAO.findById(id);
     }
 
     @Override
     public Pagination<Student> findByName(String name, int page, int size){
-        return studentDAO.findByName(name,page,size);
+        return STUDENT_DAO.findByName(name,page,size);
     }
 
     @Override
     public Pagination<Student> findByEmail(String email, int page, int size){
-        return studentDAO.findByEmail(email, page, size);
+        return STUDENT_DAO.findByEmail(email, page, size);
     }
 
     @Override
     public boolean isEmailExist(String email){
-        return studentDAO.isEmailExist(email);
+        return STUDENT_DAO.isEmailExist(email);
     }
 
     @Override
     public boolean save(Account account, Student student){
-        return studentDAO.save(account,student);
+        return STUDENT_DAO.save(account,student);
+    }
+
+    @Override
+    public boolean unlockStudent(int id){
+        return STUDENT_DAO.unlockStudent(id);
+    }
+
+    @Override
+    public boolean isStudentLocked(int id){
+        return STUDENT_DAO.isStudentLocked(id);
+    }
+
+    @Override
+    public List<Student> sortStudentByName(boolean typeSort){
+        return STUDENT_DAO.sortStudentByName(typeSort);
+    }
+
+    @Override
+    public List<Student> sortStudentByEmail(boolean typeSort){
+        return STUDENT_DAO.sortStudentByEmail(typeSort);
     }
 
     @Override
     public List<Student> findAll(){
-        return studentDAO.findAll();
+        return STUDENT_DAO.findAll();
     }
 
     @Override
@@ -47,16 +67,16 @@ public class StudentServiceImp implements StudentService{
 
     @Override
     public boolean update(Student student){
-        return studentDAO.update(student);
+        return STUDENT_DAO.update(student);
     }
 
     @Override
     public boolean delete(int id){
-        return studentDAO.delete(id);
+        return STUDENT_DAO.delete(id);
     }
 
     @Override
     public Pagination<Student> findPage(int page, int size){
-        return studentDAO.findPage(page, size);
+        return STUDENT_DAO.findPage(page, size);
     }
 }

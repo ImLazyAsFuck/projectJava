@@ -10,9 +10,10 @@ create table account (
                          a_role enum('ADMIN', 'STUDENT')  not null default('STUDENT')
 );
 
+drop table if exists student;
 create table student (
                          s_id int primary key auto_increment,
-                         a_id int not null,
+                         a_id int not null unique,
                          s_full_name varchar(100) not null,
                          s_dob date not null,
                          s_email varchar(100) not null unique,

@@ -5,15 +5,17 @@ import ra.edu.business.model.Pagination;
 import ra.edu.business.model.course.Course;
 import ra.edu.business.service.courseService.CourseService;
 import ra.edu.business.service.courseService.CourseServiceImp;
+import ra.edu.business.service.studentService.StudentService;
 import ra.edu.utils.Input;
 import ra.edu.utils.Print.PrintError;
 import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.validate.*;
 
+import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
+import static ra.edu.presentation.adminUI.AdminUI.PAGE_SIZE;
+
 public class CourseManagementUI{
     private final static CourseService COURSE_SERVICE = new CourseServiceImp();
-    private final static int PAGE_SIZE = 5;
-    private final static int FIRST_PAGE = 1;
 
     private static int currentPage = FIRST_PAGE;
     public static void showCourseMenu() {
@@ -65,8 +67,7 @@ public class CourseManagementUI{
         if(isEmptyOrPrintCourses()){
             return;
         }
-        System.out.print("Enter course name to search: ");
-        String searchName = Input.input.nextLine().trim();
+        String searchName = StringValidator.validate("Enter search name: ", new LengthContain(0, 100));
 
         currentPage = FIRST_PAGE;
         Pagination<Course> firstPage = COURSE_SERVICE.searchByName(searchName, FIRST_PAGE, PAGE_SIZE);
@@ -190,7 +191,9 @@ public class CourseManagementUI{
     public static void displayCourse() {
         Pagination<Course> firstPage = COURSE_SERVICE.findPage(FIRST_PAGE, PAGE_SIZE);
         if (firstPage.getItems().isEmpty()) {
+            System.out.println();
             PrintError.println("Course list is empty.");
+            System.out.println();
             return;
         }
         int totalPage = firstPage.getTotalPages();
@@ -312,29 +315,35 @@ public class CourseManagementUI{
         Course course = COURSE_SERVICE.findbyId(id);
         int choice;
         while(true){
-            System.out.println("========= Update Course Menu =============");
-            System.out.println("1. Update name");
-            System.out.println("3. Update duration");
-            System.out.println("2. Update description");
-            System.out.println("4. Update instructor");
-            System.out.println("5. Exit");
-            System.out.println("==========================================");
+            System.out.println("============== Update Course Menu ==============");
+            System.out.println("| 1. | Update name                              |");
+            System.out.println("| 2. | Update description                       |");
+            System.out.println("| 3. | Update duration                          |");
+            System.out.println("| 4. | Update instructor                        |");
+            System.out.println("| 5. | Exit                                     |");
+            System.out.println("===============================================");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 5);
+
+            System.out.println();
             switch(choice){
                 case 1:
                     course.setName(course.inputCourseName());
+                    PrintSuccess.println("Course name updated.");
                     System.out.println();
                     break;
                 case 2:
                     course.setDuration(course.inputCourseDuration());
+                    PrintSuccess.println("Course duration updated.");
                     System.out.println();
                     break;
                 case 3:
                     course.setDescription(course.inputCourseDescription());
+                    PrintSuccess.println("Course description updated");
                     System.out.println();
                     break;
                 case 4:
                     course.setInstructor(course.inputCourseInstructor());
+                    PrintSuccess.println("Course instructor updated.");
                     System.out.println();
                     break;
                 case 5:
@@ -366,5 +375,6 @@ public class CourseManagementUI{
         );
         System.out.println();
     }
+
 
 }

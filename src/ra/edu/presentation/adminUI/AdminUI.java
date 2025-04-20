@@ -5,8 +5,11 @@ import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.validate.ChoiceValidator;
 
 import static ra.edu.presentation.adminUI.CourseManagementUI.showCourseMenu;
+import static ra.edu.presentation.adminUI.StudentManagementUI.displayStudentManagement;
 
 public class AdminUI{
+    public final static int PAGE_SIZE = 5;
+    public final static int FIRST_PAGE = 1;
     public static void showAdminMenu() {
         int choice;
         do {
@@ -26,6 +29,7 @@ public class AdminUI{
                     showCourseMenu();
                     break;
                 case 2:
+                    displayStudentManagement();
                     break;
                 case 3:
                     break;
