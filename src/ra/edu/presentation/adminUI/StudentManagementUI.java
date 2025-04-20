@@ -7,15 +7,19 @@ public class StudentManagementUI{
     public static void displayStudentManagement(){
         int choice;
         do {
-            System.out.println("\n===== STUDENT MANAGEMENT MENU =====");
-            System.out.println("1. Display the list of students");
-            System.out.println("2. Add a new student");
-            System.out.println("3. Edit student information (Show menu to select attribute to edit)");
-            System.out.println("4. Delete a student (Soft delete from course)");
-            System.out.println("5. Search by name, email");
-            System.out.println("6. Sort by ID (ascending/descending)");
-            System.out.println("7. Return to main menu");
+            System.out.println("\n+===============================================================+");
+            System.out.println("|                  STUDENT MANAGEMENT MENU                      |");
+            System.out.println("+====+==========================================================+");
+            System.out.println("| 1. | Display the list of students                             |");
+            System.out.println("| 2. | Add a new student                                        |");
+            System.out.println("| 3. | Edit student information (select attribute to edit)      |");
+            System.out.println("| 4. | Delete a student (Soft delete from course)               |");
+            System.out.println("| 5. | Search by name, email                                    |");
+            System.out.println("| 6. | Sort by ID (ascending/descending)                        |");
+            System.out.println("| 7. | Return to main menu                                      |");
+            System.out.println("+====+==========================================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 7);
+            System.out.println();
             switch (choice) {
                 case 1:
                     System.out.println("Displaying the list of students...");

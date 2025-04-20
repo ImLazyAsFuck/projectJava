@@ -1,4 +1,4 @@
-use student_and_course_management;
+use project_java;
 
 INSERT INTO course (c_name, c_duration, c_description, c_status, c_instructor)
 VALUES

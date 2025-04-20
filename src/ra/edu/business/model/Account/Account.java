@@ -24,7 +24,6 @@ public class Account{
         this.accountId = accountId;
         this.username = username;
         this.password = password;
-        this.email = email;
         this.status = status;
         this.role = role;
     }

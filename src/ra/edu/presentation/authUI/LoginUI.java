@@ -17,11 +17,13 @@ public class LoginUI{
     public static void displayLoginMenu(){
         int choice;
         do {
-            System.out.println("========= TRAINING MANAGEMENT SYSTEM =========");
-            System.out.println("1. Login as Administrator");
-            System.out.println("2. Login as Student");
-            System.out.println("3. Exit");
-            System.out.println("==============================================");
+            System.out.println("+==============================================+");
+            System.out.println("|         TRAINING MANAGEMENT SYSTEM           |");
+            System.out.println("+====+=========================================+");
+            System.out.println("| 1. | Login as Administrator                  |");
+            System.out.println("| 2. | Login as Student                        |");
+            System.out.println("| 3. | Exit                                    |");
+            System.out.println("+====+=========================================+");
             choice = ChoiceValidator.validateChoice("Enter your choice: ", 3);
             System.out.println();
             switch (choice) {
@@ -40,31 +42,45 @@ public class LoginUI{
         } while (choice != 3);
     }
 
-    public static void loginAsAdmin(){
+    public static void loginAsAdmin() {
+        System.out.println("\n+============================+");
+        System.out.println("|      ADMIN LOGIN FORM      |");
+        System.out.println("+============================+");
         String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
+
         Account account = AUTH_SERVICE.loginAsAdmin(username, password);
         if (account != null) {
-            System.out.println();
-            PrintSuccess.println("Logged in successfully!");
-            System.out.println();
+            System.out.println("\n+----------------------------+");
+            PrintSuccess.println(" Logged in successfully! ");
+            System.out.println("+----------------------------+\n");
             AdminUI.showAdminMenu();
-        }else{
-            System.out.println();
-            PrintError.println("Incorrect username or password!");
-            System.out.println();
+        } else {
+            System.out.println("\n+----------------------------+");
+            PrintError.println(" Incorrect username or password! ");
+            System.out.println("+----------------------------+\n");
         }
     }
 
-    public static void loginAsStudent(){
+
+    public static void loginAsStudent() {
+        System.out.println("\n+=============================+");
+        System.out.println("|     STUDENT LOGIN FORM      |");
+        System.out.println("+=============================+");
         String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
+
         Account account = AUTH_SERVICE.loginAsStudent(username, password);
         if (account != null) {
-            PrintSuccess.println("Logged in successfully!");
+            System.out.println("\n+-----------------------------+");
+            PrintSuccess.println(" Logged in successfully! ");
+            System.out.println("+-----------------------------+\n");
             StudentUI.studentMainMenu();
-        }else{
-            PrintError.println("Incorrect username or password!");
+        } else {
+            System.out.println("\n+-----------------------------+");
+            PrintError.println(" Incorrect username or password! ");
+            System.out.println("+-----------------------------+\n");
         }
     }
+
 }

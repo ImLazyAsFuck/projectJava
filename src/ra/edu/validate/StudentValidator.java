@@ -46,24 +46,27 @@ public class StudentValidator{
         }
     }
 
-    public static String studentNameValidate(String message, LengthContain lengthContain){
-        while(true){
-            try{
+    public static String studentNameValidate(String message, LengthContain lengthContain) {
+        while (true) {
+            try {
                 System.out.print(message);
-                String newString = Input.input.nextLine().trim().replace("\\s+", " ");
-                if(newString.isEmpty()){
-                    throw new IllegalArgumentException("Course name can't be empty");
-                }else if(newString.length() < lengthContain.getMinLength()){
-                    throw new IllegalArgumentException("Course name length must be at least " + lengthContain.getMinLength() + " characters");
-                }else if(newString.length() > lengthContain.getMaxLength()){
-                    throw new IllegalArgumentException("Course name length must be less than " + lengthContain.getMaxLength() + " characters");
+                String newString = Input.input.nextLine().trim().replaceAll("\\s+", " ");
+
+                if (newString.isEmpty()) {
+                    throw new IllegalArgumentException("Student name can't be empty");
+                } else if (newString.length() < lengthContain.getMinLength()) {
+                    throw new IllegalArgumentException("Student name must be at least " + lengthContain.getMinLength() + " characters");
+                } else if (newString.length() > lengthContain.getMaxLength()) {
+                    throw new IllegalArgumentException("Student name must be less than " + lengthContain.getMaxLength() + " characters");
                 }
+
                 return newString;
-            }catch(IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 PrintError.println(e.getMessage());
-            }catch(Exception e){
-                PrintError.println("Unknown exception! Please try again");
+            } catch (Exception e) {
+                PrintError.println("Unknown exception! Please try again.");
             }
         }
     }
+
 }
