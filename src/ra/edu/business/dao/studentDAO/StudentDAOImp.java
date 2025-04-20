@@ -30,7 +30,7 @@ public class StudentDAOImp implements StudentDAO{
     public boolean isEmailExist(String email) {
         Connection con = null;
         CallableStatement cs = null;
-        ResultSet rs = null;
+        ResultSet rs;
 
         try {
             con = ConnectionDB.openConnection();
