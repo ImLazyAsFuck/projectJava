@@ -42,10 +42,10 @@ public class AuthValidator{
                 System.out.print(message);
                 String cPassword = Input.input.nextLine();
                 if (cPassword.isEmpty()) {
-                    throw new IllegalArgumentException("Confirm password cannot be empty!");
+                    throw new IllegalArgumentException("Password cannot be empty!");
                 }
                 if(!cPassword.equals(password)){
-                    throw new IllegalArgumentException("Confirm password do not match!");
+                    throw new IllegalArgumentException("Password do not match!");
                 }
                 return cPassword;
             }catch(IllegalArgumentException e){

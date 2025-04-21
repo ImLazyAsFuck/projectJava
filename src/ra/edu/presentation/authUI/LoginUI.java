@@ -12,7 +12,7 @@ import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.StringValidator;
 
 public class LoginUI{
-    private final static AuthService AUTH_SERVICE = new AuthServiceImp();
+    public final static AuthService AUTH_SERVICE = new AuthServiceImp();
 
     public static void displayLoginMenu(){
         int choice;
@@ -50,6 +50,7 @@ public class LoginUI{
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
 
         Account account = AUTH_SERVICE.loginAsAdmin(username, password);
+        Account.currentAccount = account;
         if (account != null) {
             System.out.println("\n+----------------------------+");
             PrintSuccess.println(" Logged in successfully! ");
@@ -71,6 +72,7 @@ public class LoginUI{
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
 
         Account account = AUTH_SERVICE.loginAsStudent(username, password);
+        Account.currentAccount = account;
         if (account != null) {
             System.out.println("\n+-----------------------------+");
             PrintSuccess.println(" Logged in successfully! ");

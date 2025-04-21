@@ -227,8 +227,6 @@ begin
         select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
         from student
         order by s_full_name desc;
-    else
-        select 'Invalid type_sort value' as error_message;
     end if;
 end;
 delimiter //
@@ -245,8 +243,6 @@ begin
         select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
         from student
         order by s_email desc;
-    else
-        select 'Invalid type_sort value' as error_message;
     end if;
 end;
 delimiter //

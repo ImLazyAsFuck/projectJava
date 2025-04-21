@@ -17,7 +17,7 @@ public class AuthServiceImp implements AuthService{
     }
 
     @Override
-    public Account changePassword(String username, String newPassword){
-        return authDAO.changePassword(username, newPassword);
+    public Account changePassword(int id, String newPassword){
+        return authDAO.changePassword(id, newPassword);
     }
 }

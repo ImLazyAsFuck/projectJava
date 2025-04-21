@@ -98,7 +98,32 @@ public class AuthDAOImp implements AuthDAO{
     }
 
     @Override
-    public Account changePassword(String username, String newPassword){
+    public Account changePassword(int id, String newPassword){
+        Connection con = null;
+        CallableStatement cs = null;
+        Account account = null;
+        try{
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call changePassword(?,?)}");
+            cs.setInt(1, id);
+            cs.setString(2, newPassword);
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                account = new Account();
+                account.setId(rs.getInt("a_id"));
+                account.setUsername(rs.getString("a_username"));
+                account.setPassword(rs.getString("a_password"));
+                account.setStatus(AccountStatus.valueOf(rs.getString("a_status")));
+                account.setRole(Role.valueOf(rs.getString("a_role")));
+                return  account;
+            }
+        }catch(SQLException e){
+            PrintError.println("Error while login as student" + e.getMessage());
+        }catch(Exception e){
+            PrintError.println("Unknown error while login as student" + e.getMessage());
+        }finally{
+            ConnectionDB.closeConnection(con, cs);
+        }
         return null;
     }
 }

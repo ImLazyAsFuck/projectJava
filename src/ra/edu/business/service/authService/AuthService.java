@@ -6,5 +6,5 @@ import ra.edu.business.model.student.Student;
 public interface AuthService{
     Account loginAsAdmin(String username, String password);
     Account loginAsStudent(String username, String password);
-    Account changePassword(String username, String newPassword);
+    Account changePassword(int id, String newPassword);
 }

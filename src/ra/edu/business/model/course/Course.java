@@ -13,6 +13,7 @@ public class Course implements Inputable{
     private int id;
     private String name;
     private int duration;
+//    private
     private String description;
     private String instructor;
     private LocalDateTime createdAt;

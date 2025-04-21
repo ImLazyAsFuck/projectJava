@@ -1,9 +1,18 @@
 package ra.edu.presentation.adminUI;
 
+import ra.edu.business.model.Account.Account;
+import ra.edu.business.model.LengthContain;
+import ra.edu.business.service.enrollmentService.EnrollmentService;
+import ra.edu.business.service.enrollmentService.EnrollmentServiceImp;
 import ra.edu.utils.Print.PrintError;
 import ra.edu.validate.ChoiceValidator;
+import ra.edu.validate.IntegerValidator;
+
+import static ra.edu.presentation.adminUI.CourseManagementUI.COURSE_SERVICE;
+import static ra.edu.presentation.adminUI.StudentManagementUI.STUDENT_SERVICE;
 
 public class CourseRegistrationUI{
+    public final static EnrollmentService ENROLLMENT_SERVICE = new EnrollmentServiceImp();
     public static void courseRegistrationMenu(String[] args) {
         int choice;
         do {
@@ -34,5 +43,19 @@ public class CourseRegistrationUI{
                     PrintError.println("Invalid choice! Try again!");
             }
         } while (true);
+    }
+
+
+    public static void displayStudentByCourse(){
+//       if(isEmptyOrPrintCourses()){
+//           return;
+//       }
+//       int currentPage = 1;
+//       int coutseId = IntegerValidator.validate("Enter course Id: ", new LengthContain(0, 1000));
+//       int studentId = STUDENT_SERVICE.findStudentById(Account.currentAccount.getId());
+//       if(studentId == -1){
+//           PrintError.println("Student not found! Try again!");
+//       }
+//       ENROLLMENT_SERVICE.studentByCourse(studentId, currentPage, size, coutseId);
     }
 }

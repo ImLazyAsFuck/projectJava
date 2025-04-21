@@ -356,6 +356,30 @@ public class StudentDAOImp implements StudentDAO{
     }
 
     @Override
+    public int findStudentById(int id) {
+        Connection con = null;
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        int studentId = -1;
+
+        try {
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call find_student_by_acc_id(?)}");
+            cs.setInt(1, id);
+            rs = cs.executeQuery();
+            if (rs.next()) {
+                studentId = rs.getInt("s_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error executing find_student_by_acc_id: " + e.getMessage());
+        } finally {
+            ConnectionDB.closeConnection(con, cs);
+        }
+        return studentId;
+    }
+
+    @Override
     public boolean update(Student student){
         Connection con = null;
         CallableStatement cs = null;
@@ -457,4 +481,6 @@ public class StudentDAOImp implements StudentDAO{
         }
         return pagination;
     }
+
+
 }
