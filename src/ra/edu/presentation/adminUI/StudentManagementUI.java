@@ -32,8 +32,8 @@ public class StudentManagementUI{
             System.out.println("| 2. | Add a new student                                        |");
             System.out.println("| 3. | Edit student information (select attribute to edit)      |");
             System.out.println("| 4. | Delete a student (Soft delete from course)               |");
-            System.out.println("| 5. | Search by name, email                                    |");
-            System.out.println("| 6. | Sort by ID (ascending/descending)                        |");
+            System.out.println("| 5. | Search by name, email, id                                |");
+            System.out.println("| 6. | Sort by name or email (ascending/descending)             |");
             System.out.println("| 7. | Return to main menu                                      |");
             System.out.println("+====+==========================================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 7);
@@ -204,9 +204,11 @@ public class StudentManagementUI{
 
     public static void addStudent(){
         Student student = new Student();
+        Account account = new Account();
+        account.inputData();
         student.inputData();
-        if(STUDENT_SERVICE.save(student)){
-            System.out.println("Student added.");
+        if(STUDENT_SERVICE.save(account,student)){
+            PrintSuccess.println("Student added.");
             System.out.println();
         }else{
             PrintError.println("Student can not added because unknown error.");
@@ -285,7 +287,7 @@ public class StudentManagementUI{
         }
         if(STUDENT_SERVICE.isStudentLocked(id)){
             if(STUDENT_SERVICE.unlockStudent(id)) {
-                PrintSuccess.println("student unlocked successfully.");
+                PrintSuccess.println("Student unlocked successfully.");
             }else{
                 PrintError.println("Course could not be unlocked.");
             }
@@ -343,7 +345,7 @@ public class StudentManagementUI{
             return;
         }
 
-        PrintSuccess.println("Student found.");
+//        PrintSuccess.println("Student found.");
         System.out.println("---------------------------------------------------------------------------------------------------------------");
         System.out.printf("| %-4s | %-20s | %-10s | %-6s | %-12s | %-25s | %-19s |%n",
                 "ID", "Full Name", "DOB", "Sex", "Phone", "Email", "Created At");
@@ -497,13 +499,39 @@ public class StudentManagementUI{
     }
 
     public static void sortStudentsByEmail(){
-        boolean typeSort = BooleanValidator.validateBoolean("Enter type sort (true is asc / false is desc).):");
-        STUDENT_SERVICE.sortStudentByEmail(typeSort);
+        boolean typeSort = BooleanValidator.validateBoolean("Enter type sort (true is asc / false is desc):");
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-4s | %-20s | %-10s | %-6s | %-12s | %-25s | %-19s |%n",
+                "ID", "Full Name", "DOB", "Sex", "Phone", "Email", "Created At");
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+        STUDENT_SERVICE.sortStudentByEmail(typeSort).forEach(student ->
+                System.out.printf("| %-4d | %-20s | %-10s | %-6s | %-12s | %-25s | %-19s |%n",
+                        student.getId(),
+                        student.getFullName(),
+                        student.getDob(),
+                        student.isSex() ? "Male" : "Female",
+                        student.getPhone(),
+                        student.getEmail(),
+                        student.getCreatedAt()));
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
     }
 
     public static void sortStudentsByName(){
-        boolean typeSort = BooleanValidator.validateBoolean("Enter type sort (true is asc / false is desc).):");
-        STUDENT_SERVICE.sortStudentByName(typeSort);
+        boolean typeSort = BooleanValidator.validateBoolean("Enter type sort (true is asc / false is desc):");
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-4s | %-20s | %-10s | %-6s | %-12s | %-25s | %-19s |%n",
+                "ID", "Full Name", "DOB", "Sex", "Phone", "Email", "Created At");
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+        STUDENT_SERVICE.sortStudentByName(typeSort).forEach(student ->
+                System.out.printf("| %-4d | %-20s | %-10s | %-6s | %-12s | %-25s | %-19s |%n",
+                        student.getId(),
+                        student.getFullName(),
+                        student.getDob(),
+                        student.isSex() ? "Male" : "Female",
+                        student.getPhone(),
+                        student.getEmail(),
+                        student.getCreatedAt()));
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
     }
 
     public static void sortStudent() {

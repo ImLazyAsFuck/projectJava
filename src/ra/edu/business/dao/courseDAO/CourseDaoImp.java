@@ -90,7 +90,7 @@ public class CourseDaoImp implements CourseDAO {
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-            pagination.setCurrentPage(page);
+//            pagination.setCurrentPage(page);
             pagination.setPageSize(pageSize);
             pagination.setItems(list);
 
@@ -326,7 +326,7 @@ public class CourseDaoImp implements CourseDAO {
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-            pagination.setCurrentPage(page);
+//            pagination.setCurrentPage(page);
             pagination.setPageSize(size);
             pagination.setItems(list);
 

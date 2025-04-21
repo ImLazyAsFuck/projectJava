@@ -34,7 +34,7 @@ end;
 delimiter //
 
 delimiter //
-drop table if exists create_student;
+drop procedure if exists create_student;
 create procedure create_student(
     in in_username varchar(50),
     in in_password varchar(255),
@@ -50,9 +50,7 @@ begin
     insert into account(a_username, a_password)
     values (in_username, in_password);
 
-    select a_id into new_a_id
-    from account
-    where a_username = in_username;
+    set new_a_id = last_insert_id();
 
     insert into student(
         a_id,
@@ -106,7 +104,7 @@ begin
 
     select a_id into account_id
     from student
-    where s_id = id;
+    where a_id = id;
 
     if account_id is not null then
         update account set a_status = 'BLOCKED' where a_id = account_id;
@@ -129,7 +127,7 @@ begin
 
     select a_id into account_id
     from student
-    where s_id = id;
+    where a_id = id;
 
     if account_id is not null then
         update account set a_status = 'ACTIVE' where a_id = account_id;
@@ -142,18 +140,12 @@ end;
 delimiter //
 
 delimiter //
-create procedure find_student_by_id(in_id int, return_code int)
+drop procedure if exists  find_student_by_id;
+create procedure find_student_by_id(in_id int, out return_code int)
 begin
-    declare cnt int;
-    select (s_id) from student
+    select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at from student
     where s_id = in_id;
-    if cnt = 0 then
-        set return_code = 1;
-    else
-        select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at from student
-        where s_id = in_id;
-        set return_code = 0;
-    end if;
+    set return_code = 0;
 end;
 delimiter //
 
@@ -235,8 +227,6 @@ begin
         select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
         from student
         order by s_full_name desc;
-    else
-        select 'Invalid type_sort value' as error_message;
     end if;
 end;
 delimiter //
@@ -253,8 +243,6 @@ begin
         select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
         from student
         order by s_email desc;
-    else
-        select 'Invalid type_sort value' as error_message;
     end if;
 end;
 delimiter //

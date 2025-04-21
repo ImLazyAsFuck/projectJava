@@ -1,11 +1,13 @@
 package ra.edu.business.model.Account;
 
-public class Account{
+import ra.edu.business.model.Inputable;
+import ra.edu.business.model.LengthContain;
+import ra.edu.validate.StudentValidator;
+
+public class Account implements Inputable{
     private int id;
-    private int accountId;
     private String username;
     private String password;
-    private String email;
     private AccountStatus status;
     private Role role;
 
@@ -19,24 +21,10 @@ public class Account{
 
     public static Account currentAccount = null;
 
-    public Account(int id, int accountId, String username, String password, String email, AccountStatus status, Role role){
-        this.id = id;
-        this.accountId = accountId;
-        this.username = username;
-        this.password = password;
-        this.status = status;
-        this.role = role;
-    }
 
     public Account(){
-    }
-
-    public int getAccountId(){
-        return accountId;
-    }
-
-    public void setAccountId(int accountId){
-        this.accountId = accountId;
+        this.status = AccountStatus.ACTIVE;
+        this.role = Role.STUDENT;
     }
 
     public AccountStatus getStatus(){
@@ -47,12 +35,12 @@ public class Account{
         this.status = status;
     }
 
-    public String getEmail(){
-        return email;
-    }
-
-    public void setEmail(String email){
-        this.email = email;
+    public Account(int id, String username, String password, AccountStatus status, Role role){
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.role = role;
     }
 
     public String getPassword(){
@@ -89,4 +77,10 @@ public class Account{
     }
 
 
+    @Override
+    public void inputData(){
+        this.username = StudentValidator.studentNameValidate("Enter the username: ", new LengthContain(0, 100));
+        this.password = StudentValidator.passwordValidate("Enter the password: ");
+
+    }
 }

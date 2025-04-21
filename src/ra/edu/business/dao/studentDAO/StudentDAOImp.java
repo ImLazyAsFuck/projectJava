@@ -66,7 +66,7 @@ public class StudentDAOImp implements StudentDAO{
             cs.setInt(2, page);
             cs.setInt(3, size);
             rs = cs.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 Student student = new Student();
                 student.setId(rs.getInt("s_id"));
                 student.setEmail(rs.getString("s_email"));
@@ -87,7 +87,7 @@ public class StudentDAOImp implements StudentDAO{
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-            pagination.setCurrentPage(page);
+//            pagination.setCurrentPage(page);
             pagination.setPageSize(size);
             pagination.setItems(list);
         }catch(SQLException e){
@@ -114,7 +114,7 @@ public class StudentDAOImp implements StudentDAO{
             cs.setInt(2, page);
             cs.setInt(3, size);
             rs = cs.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 Student student = new Student();
                 student.setId(rs.getInt("s_id"));
                 student.setEmail(rs.getString("s_email"));
@@ -135,7 +135,7 @@ public class StudentDAOImp implements StudentDAO{
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-            pagination.setCurrentPage(page);
+//            pagination.setCurrentPage(page);
             pagination.setPageSize(size);
             pagination.setItems(list);
         }catch(SQLException e){
@@ -206,15 +206,13 @@ public class StudentDAOImp implements StudentDAO{
         return list;
     }
 
-    @Override
-    public boolean save(Student student){
-        return false;
-    }
 
     @Override
     public boolean save(Account account, Student student) {
         Connection con = null;
         CallableStatement cs = null;
+        System.out.println(account.getUsername());
+        System.out.println(student.getFullName());
         try {
             con = ConnectionDB.openConnection();
             cs = con.prepareCall("{call create_student(?,?,?,?,?,?,?)}");
@@ -225,7 +223,7 @@ public class StudentDAOImp implements StudentDAO{
             cs.setString(5, student.getEmail());
             cs.setBoolean(6, student.isSex());
             cs.setString(7, student.getPhone());
-            cs.execute();
+            cs.executeUpdate();
             return true;
         } catch(SQLException e) {
             PrintError.println("Error while saving student: " + e.getMessage());
@@ -234,6 +232,11 @@ public class StudentDAOImp implements StudentDAO{
         } finally {
             ConnectionDB.closeConnection(con, cs);
         }
+        return false;
+    }
+
+    @Override
+    public boolean save(Student student){
         return false;
     }
 
@@ -275,7 +278,6 @@ public class StudentDAOImp implements StudentDAO{
             cs.execute();
             returnCode = cs.getInt(2);
             if(returnCode == 1){
-                PrintError.println("Student is locked");
                 return true;
             }else if(returnCode == 0){
                 return false;
@@ -303,7 +305,7 @@ public class StudentDAOImp implements StudentDAO{
             cs = con.prepareCall("{call sort_student_by_name(?)}");
             cs.setBoolean(1, typeSort);
             ResultSet rs = cs.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 Student s = new Student();
                 s.setFullName(rs.getString("s_full_name"));
                 s.setEmail(rs.getString("s_email"));
@@ -333,7 +335,7 @@ public class StudentDAOImp implements StudentDAO{
             cs = con.prepareCall("{call sort_student_by_name(?)}");
             cs.setBoolean(1, typeSort);
             ResultSet rs = cs.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 Student s = new Student();
                 s.setFullName(rs.getString("s_full_name"));
                 s.setEmail(rs.getString("s_email"));
@@ -362,10 +364,10 @@ public class StudentDAOImp implements StudentDAO{
             cs = con.prepareCall("{call update_student(?,?,?,?,?,?)}");
             cs.setInt(1, student.getId());
             cs.setString(2, student.getFullName());
-            cs.setString(2, student.getEmail());
-            cs.setDate(3, Date.valueOf(student.getDob()));
-            cs.setString(4, student.getPhone());
-            cs.setBoolean(5, student.isSex());
+            cs.setString(3, student.getEmail());
+            cs.setDate(4, Date.valueOf(student.getDob()));
+            cs.setString(5, student.getPhone());
+            cs.setBoolean(6, student.isSex());
             cs.executeUpdate();
             return true;
         }catch(SQLException e){
@@ -442,7 +444,7 @@ public class StudentDAOImp implements StudentDAO{
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-            pagination.setCurrentPage(page);
+//            pagination.setCurrentPage(page);
             pagination.setPageSize(size);
             pagination.setItems(list);
             return pagination;

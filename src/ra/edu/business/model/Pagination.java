@@ -6,14 +6,14 @@ import java.util.List;
 
 public class Pagination<T>{
     private List<T> items;
-    private int currentPage = 1;
+//    private int currentPage = 1;
     private int totalPages;
     private int totalItems;
     private int pageSize = 5;
 
     public Pagination(List<T> items, int currentPage, int totalPages, int totalItems, int pageSize){
         this.items = items;
-        this.currentPage = currentPage;
+//        this.currentPage = currentPage;
         this.totalPages = totalPages;
         this.totalItems = totalItems;
         this.pageSize = pageSize;
@@ -38,16 +38,16 @@ public class Pagination<T>{
         this.items = items;
     }
 
-    public int getCurrentPage(){
-        return currentPage;
-    }
+//    public int getCurrentPage(){
+//        return currentPage;
+//    }
 
-    public void setCurrentPage(int currentPage) {
-        if (currentPage < 1 || currentPage > totalPages) {
-            PrintError.println("Invalid page number! Please enter between 1 and " + totalPages);
-        }
-        this.currentPage = currentPage;
-    }
+//    public void setCurrentPage(int currentPage) {
+//        if (currentPage < 1 || currentPage > totalPages) {
+//            PrintError.println("Invalid page number! Please enter between 1 and " + totalPages);
+//        }
+//        this.currentPage = currentPage;
+//    }
 
     public int getTotalPages(){
         return totalPages;
