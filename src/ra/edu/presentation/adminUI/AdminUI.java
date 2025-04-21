@@ -2,9 +2,11 @@ package ra.edu.presentation.adminUI;
 
 import ra.edu.utils.Print.PrintError;
 import ra.edu.utils.Print.PrintSuccess;
+import ra.edu.utils.Print.printColor.PrintColor;
 import ra.edu.validate.ChoiceValidator;
 
 import static ra.edu.presentation.adminUI.CourseManagementUI.showCourseMenu;
+import static ra.edu.presentation.adminUI.CourseRegistration.displayCourseRegistrationMenu;
 import static ra.edu.presentation.adminUI.StudentManagementUI.displayStudentManagement;
 
 public class AdminUI{
@@ -32,17 +34,16 @@ public class AdminUI{
                     displayStudentManagement();
                     break;
                 case 3:
+                    displayCourseRegistrationMenu();
                     break;
                 case 4:
                     break;
                 case 5:
-                    PrintSuccess.println("Logout successful!");
+                    PrintColor.printCyan("Logout successful!");
                     return;
                 default:
                     PrintError.println("Invalid choice! Please choose either 1 or 5!");
             }
         } while (true);
     }
-
-
 }

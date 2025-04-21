@@ -20,7 +20,7 @@ import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
 import static ra.edu.presentation.adminUI.AdminUI.PAGE_SIZE;
 
 public class StudentManagementUI{
-    private final static StudentService STUDENT_SERVICE = new StudentServiceImp();
+    public final static StudentService STUDENT_SERVICE = new StudentServiceImp();
 
     public static void displayStudentManagement(){
         int choice;

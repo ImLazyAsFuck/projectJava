@@ -15,7 +15,7 @@ import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
 import static ra.edu.presentation.adminUI.AdminUI.PAGE_SIZE;
 
 public class CourseManagementUI{
-    private final static CourseService COURSE_SERVICE = new CourseServiceImp();
+    public final static CourseService COURSE_SERVICE = new CourseServiceImp();
 
     private static int currentPage = FIRST_PAGE;
     public static void showCourseMenu() {
