@@ -125,43 +125,46 @@ public class CourseRegistrationUI{
     }
 
     public static void displayStudentsByCourse() {
-        if(isEmptyOrPrintStudents()){
+        if(isEmptyOrPrintCourses()){
             return;
         }
 
-        int studentId = IntegerValidator.validate("Enter the student Id: ", new LengthContain(0, 1000));
-        if(STUDENT_SERVICE.findById(studentId) == null){
-            PrintError.println("Not found student");
+        int courseId = IntegerValidator.validate("Enter the student Id: ", new LengthContain(0, 1000));
+        if(COURSE_SERVICE.findbyId(courseId) == null){
+            PrintError.println("Not found course with id: " + courseId);
             return;
         }
 
-        Pagination<Course> firstPage = ENROLLMENT_SERVICE.findCourseByStudentId(studentId, FIRST_PAGE, PAGE_SIZE);
-        if (firstPage.getItems().isEmpty()) {
-            System.out.println();
-            PrintError.println("Course list is empty.");
-            System.out.println();
+        Pagination<Student> firstPage = ENROLLMENT_SERVICE.studentByCourse(courseId, FIRST_PAGE, PAGE_SIZE);
+        if(firstPage.getItems().isEmpty()){
+            PrintError.println("No student found in the course with id: " + courseId);
             return;
         }
         int totalPage = firstPage.getTotalPages();
         int currentPage = FIRST_PAGE;
 
         while(true){
-            Pagination<Course> coursePage = ENROLLMENT_SERVICE.findCourseByStudentId(studentId, currentPage, PAGE_SIZE);
+            Pagination<Student> studentPage = ENROLLMENT_SERVICE.studentByCourse(courseId, currentPage, PAGE_SIZE);
             System.out.println("=".repeat(200));
-            System.out.printf("|%-10s | %-40s | %-20s | %-70s | %-20s | %-20s|%n",
-                    "Course Id", "Course Name", "Duration", "Description", "Instructor", "Created At");
+            System.out.printf("|%-5s | %-30s | %-15s | %-10s | %-15s | %-30s | %-20s|%n",
+                    "ID", "Full Name", "Date of Birth", "Sex", "Phone", "Email", "Created At");
             System.out.println("-".repeat(200));
 
-            coursePage.getItems().forEach(course ->
-                    System.out.printf("|%-10d | %-40s | %-20d | %-70s | %-20s | %-20s|%n",
-                            course.getId(), course.getName(), course.getDuration(),
-                            course.getDescription(), course.getInstructor(),
-                            course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
-            );
+            studentPage.getItems().forEach(student -> {
+                System.out.printf("|%-5d | %-30s | %-15s | %-10s | %-15s | %-30s | %-20s|%n",
+                        student.getId(),
+                        student.getFullName(),
+                        student.getDob() != null? student.getDob().toString() : "N/A",
+                        student.isSex()? "Male" : "Female",
+                        student.getPhone(),
+                        student.getEmail(),
+                        student.getCreatedAt() != null? student.getCreatedAt().toString() : "N/A"
+                );
+            });
+
             System.out.printf("Page %d/%d%n", currentPage, totalPage);
             StudentManagementUI.printPagination(currentPage, totalPage);
             System.out.printf("%-20s%-20s%-20s%-20s\n", "1.Prev", "2.Choose", "3.Next", "4.Exit");
-
             int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
             switch(subChoice){
                 case 1:
