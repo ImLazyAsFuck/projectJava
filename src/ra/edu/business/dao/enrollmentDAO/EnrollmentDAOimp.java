@@ -88,6 +88,10 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
                     break;
                 case 3: PrintError.println("Student is already enrolled.");
                     break;
+                case 4: PrintError.println("Student is blocked.");
+                    break;
+                case 5: PrintError.println("Student is not active.");
+                    break;
                 default: PrintError.println("Unknown error.");
             }
 
