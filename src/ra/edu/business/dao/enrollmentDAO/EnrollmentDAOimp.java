@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class EnrollmentDAOimp implements EnrollmentDAO{
     @Override
-    public Pagination<Student> studentByCourse(int s_id, int page, int size) {
+    public Pagination<Student> studentByCourse(int c_id, int page, int size) {
         Pagination<Student> pagination = new Pagination<>();
         Connection con = null;
         CallableStatement cs = null;
@@ -24,22 +24,22 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
         try {
             con = ConnectionDB.openConnection();
             cs = con.prepareCall("{call display_student_by_course(?,?,?,?)}");
-            cs.setInt(1, page);
-            cs.setInt(2, size);
-            cs.setInt(3, s_id);
+            cs.setInt(1, c_id);
+            cs.setInt(2, page);
+            cs.setInt(3, size);
             cs.registerOutParameter(4, Types.INTEGER);
 
             rs = cs.executeQuery();
 
             while (rs.next()) {
                 Student s = new Student();
-                s.setId(rs.getInt("s.s_id"));
-                s.setFullName(rs.getString("s.s_full_name"));
-                s.setEmail(rs.getString("s.s_email"));
-                s.setPhone(rs.getString("s.s_phone"));
-                s.setSex(rs.getBoolean("s.s_sex"));
-                s.setDob(rs.getDate("s.s_dob").toLocalDate());
-                s.setCreatedAt(rs.getTimestamp("s.s_created_at").toLocalDateTime());
+                s.setId(rs.getInt("s_id"));
+                s.setFullName(rs.getString("s_full_name"));
+                s.setEmail(rs.getString("s_email"));
+                s.setPhone(rs.getString("s_phone"));
+                s.setSex(rs.getBoolean("s_sex"));
+                s.setDob(rs.getDate("s_dob").toLocalDate());
+                s.setCreatedAt(rs.getTimestamp("s_created_at").toLocalDateTime());
                 list.add(s);
             }
             int totalItems = cs.getInt(4);

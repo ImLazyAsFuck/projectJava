@@ -8,7 +8,7 @@ import ra.edu.business.model.student.Student;
 import java.util.List;
 
 public interface EnrollmentDAO{
-    Pagination<Student> studentByCourse(int s_id, int page, int size);
+    Pagination<Student> studentByCourse(int c_id, int page, int size);
     boolean addStudentToEnrollment(int courseId,int studentId);
 //    boolean isStudentExistInEnrollment(int courseId,int studentId);
     boolean removeStudentFromEnrollment(int courseId,int studentId);

@@ -141,6 +141,7 @@ public class CourseRegistrationUI{
             return;
         }
         int totalPage = firstPage.getTotalPages();
+//        int totalPage =  ENROLLMENT_SERVICE.studentByCourse(courseId, FIRST_PAGE, PAGE_SIZE).getTotalPages();
         int currentPage = FIRST_PAGE;
 
         while(true){
