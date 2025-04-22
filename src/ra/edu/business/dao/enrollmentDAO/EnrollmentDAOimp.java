@@ -276,4 +276,47 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
         }
         return pagination;
     }
+
+    @Override
+    public boolean approveStudent(int courseId, int studentId){
+        Connection con = null;
+        CallableStatement cs = null;
+        try{
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call approve_student(?,?,?)}");
+            cs.setInt(1, courseId);
+            cs.setInt(2, studentId);
+            cs.registerOutParameter(3, java.sql.Types.INTEGER);
+            cs.execute();
+            int resultCode = cs.getInt(3);
+            switch(resultCode){
+                case 0:
+                    return true;
+                case 1:
+                    PrintError.println("Student is not enrolled in this course or IDs do not match!");
+                    break;
+                case 2:
+                    PrintError.println("This student was denied. Cannot approve.");
+                    break;
+                case 3:
+                    PrintError.println("This student cancelled the enrollment. Cannot approve.");
+                    break;
+                case 4:
+                    PrintError.println("This student has already been approved!");
+                    break;
+                case 5:
+                    PrintError.println("Unknown enrollment status. Cannot proceed.");
+                    break;
+                default:
+                    PrintError.println("Unexpected return code while approving student: " + resultCode);
+            }
+        }catch(SQLException e){
+            PrintError.println("Error while approving student: " + e.getMessage());
+        }catch(Exception e){
+            PrintError.println("Unknown error while approving student: " + e.getMessage());
+        }finally{
+            ConnectionDB.closeConnection(con, cs);
+        }
+        return false;
+    }
 }

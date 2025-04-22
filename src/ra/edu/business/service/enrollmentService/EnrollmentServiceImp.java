@@ -46,4 +46,9 @@ public class EnrollmentServiceImp implements EnrollmentService {
     public Pagination<Course> findCourseByStudentId(int s_id, int page, int size){
         return ENROLLMENT_DAO.findCourseByStudentId(s_id,page,size);
     }
+
+    @Override
+    public boolean approveStudent(int courseId, int studentId){
+        return ENROLLMENT_DAO.approveStudent(courseId, studentId);
+    }
 }

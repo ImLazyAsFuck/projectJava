@@ -16,4 +16,5 @@ public interface EnrollmentDAO{
     List<Course> dislayCurrentAccCourse(int s_id);
     List<Enrollment> findAll();
     Pagination<Course> findCourseByStudentId(int s_id, int page, int size);
+    boolean approveStudent(int courseId,int studentId);
 }

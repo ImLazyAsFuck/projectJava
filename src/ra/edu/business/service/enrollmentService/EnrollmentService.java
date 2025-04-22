@@ -16,4 +16,5 @@ public interface EnrollmentService{
     boolean isCourseExist(int courseId);
     List<Course> dislayCurrentAccCourse(int s_id);
     Pagination<Course> findCourseByStudentId(int s_id, int page, int size);
+    boolean approveStudent(int courseId,int studentId);
 }
