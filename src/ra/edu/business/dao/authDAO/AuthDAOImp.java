@@ -6,10 +6,7 @@ import ra.edu.business.model.Account.AccountStatus;
 import ra.edu.business.model.Account.Role;
 import ra.edu.utils.Print.PrintError;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class AuthDAOImp implements AuthDAO{
 
@@ -98,32 +95,37 @@ public class AuthDAOImp implements AuthDAO{
     }
 
     @Override
-    public Account changePassword(int id, String newPassword){
+    public Account changePassword(int id, String newPassword) {
         Connection con = null;
         CallableStatement cs = null;
         Account account = null;
-        try{
+        try {
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call changePassword(?,?)}");
+            cs = con.prepareCall("{call change_password(?, ?, ?, ?, ?, ?)}");
+
             cs.setInt(1, id);
             cs.setString(2, newPassword);
-            ResultSet rs = cs.executeQuery();
-            while (rs.next()) {
-                account = new Account();
-                account.setId(rs.getInt("a_id"));
-                account.setUsername(rs.getString("a_username"));
-                account.setPassword(rs.getString("a_password"));
-                account.setStatus(AccountStatus.valueOf(rs.getString("a_status")));
-                account.setRole(Role.valueOf(rs.getString("a_role")));
-                return  account;
-            }
-        }catch(SQLException e){
-            PrintError.println("Error while login as student" + e.getMessage());
-        }catch(Exception e){
-            PrintError.println("Unknown error while login as student" + e.getMessage());
-        }finally{
+            cs.registerOutParameter(3, Types.VARCHAR);
+            cs.registerOutParameter(4, Types.VARCHAR);
+            cs.registerOutParameter(5, Types.VARCHAR);
+            cs.registerOutParameter(6, Types.VARCHAR);
+
+            cs.execute();
+
+            account = new Account();
+            account.setId(id);
+            account.setUsername(cs.getString(3));
+            account.setStatus(AccountStatus.valueOf(cs.getString(4)));
+            account.setRole(Role.valueOf(cs.getString(5)));
+            account.setPassword(cs.getString(6));
+
+        } catch (SQLException e) {
+            PrintError.println("Error while changing password: " + e.getMessage());
+        } catch (Exception e) {
+            PrintError.println("Unknown error while changing password: " + e.getMessage());
+        } finally {
             ConnectionDB.closeConnection(con, cs);
         }
-        return null;
+        return account;
     }
 }

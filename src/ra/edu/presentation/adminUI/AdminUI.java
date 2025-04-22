@@ -5,9 +5,6 @@ import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.utils.Print.printColor.PrintColor;
 import ra.edu.validate.ChoiceValidator;
 
-import static ra.edu.presentation.adminUI.CourseManagementUI.showCourseMenu;
-import static ra.edu.presentation.adminUI.CourseRegistration.displayCourseRegistrationMenu;
-import static ra.edu.presentation.adminUI.StudentManagementUI.displayStudentManagement;
 
 public class AdminUI{
     public final static int PAGE_SIZE = 5;
@@ -28,15 +25,16 @@ public class AdminUI{
             System.out.println();
             switch (choice) {
                 case 1:
-                    showCourseMenu();
+                    CourseManagementUI.showCourseMenu();
                     break;
                 case 2:
-                    displayStudentManagement();
+                    StudentManagementUI.displayStudentManagement();
                     break;
                 case 3:
-                    displayCourseRegistrationMenu();
+                    CourseRegistrationUI.courseRegistrationMenu();
                     break;
                 case 4:
+
                     break;
                 case 5:
                     PrintColor.printCyan("Logout successful!");

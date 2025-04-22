@@ -2,9 +2,7 @@ package ra.edu.presentation.studentUI;
 
 import ra.edu.business.model.Account.Account;
 import ra.edu.business.model.LengthContain;
-import ra.edu.business.model.enrollment.Enrollment;
 import ra.edu.presentation.adminUI.CourseManagementUI;
-import ra.edu.presentation.adminUI.CourseRegistration;
 import ra.edu.presentation.adminUI.CourseRegistrationUI;
 import ra.edu.presentation.adminUI.StudentManagementUI;
 import ra.edu.presentation.authUI.LoginUI;
@@ -53,9 +51,10 @@ public class StudentUI{
                     break;
                 case 6:
                     PrintColor.printCyan("Return to menu");
+                    System.out.println();
                     return;
                 default:
-                    System.out.println("Invalid choice! Try again!");
+                    System.out.println("Invalid choice! Please choose from 1 to 6.!");
             }
         } while (true);
     }
@@ -110,7 +109,7 @@ public class StudentUI{
             return;
         }
         String oldPassword = AuthValidator.confirmPassword("Enter password: ", Account.currentAccount.getPassword());
-        String newPassword = AuthValidator.validatePassword("Enter new password", oldPassword);
+        String newPassword = AuthValidator.validatePassword("Enter new password: ", oldPassword);
         Account.currentAccount = LoginUI.AUTH_SERVICE.changePassword(Account.currentAccount.getId(), newPassword);
         PrintSuccess.println("You have successfully changed your password!");
     }
@@ -140,5 +139,6 @@ public class StudentUI{
                                 course.getDescription(), course.getInstructor(),
                                 course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
         );
+        System.out.println("-".repeat(200));
     }
 }

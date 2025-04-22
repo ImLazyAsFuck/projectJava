@@ -2,18 +2,28 @@ package ra.edu.presentation.adminUI;
 
 import ra.edu.business.model.Account.Account;
 import ra.edu.business.model.LengthContain;
+import ra.edu.business.model.Pagination;
+import ra.edu.business.model.course.Course;
+import ra.edu.business.model.student.Student;
 import ra.edu.business.service.enrollmentService.EnrollmentService;
 import ra.edu.business.service.enrollmentService.EnrollmentServiceImp;
 import ra.edu.utils.Print.PrintError;
+import ra.edu.utils.Print.PrintSuccess;
+import ra.edu.utils.Print.printColor.PrintColor;
+import ra.edu.validate.BooleanValidator;
 import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.IntegerValidator;
 
+import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
+import static ra.edu.presentation.adminUI.AdminUI.PAGE_SIZE;
 import static ra.edu.presentation.adminUI.CourseManagementUI.COURSE_SERVICE;
+import static ra.edu.presentation.adminUI.CourseManagementUI.isEmptyOrPrintCourses;
 import static ra.edu.presentation.adminUI.StudentManagementUI.STUDENT_SERVICE;
+import static ra.edu.presentation.adminUI.StudentManagementUI.isEmptyOrPrintStudents;
 
 public class CourseRegistrationUI{
     public final static EnrollmentService ENROLLMENT_SERVICE = new EnrollmentServiceImp();
-    public static void courseRegistrationMenu(String[] args) {
+    public static void courseRegistrationMenu() {
         int choice;
         do {
             System.out.println("\n+===========================================================+");
@@ -28,16 +38,17 @@ public class CourseRegistrationUI{
             System.out.println();
             switch (choice) {
                 case 1:
-                    System.out.println("Displaying students by each course...");
+                    displayStudentsByCourse();
                     break;
                 case 2:
-                    System.out.println("Adding a student to a course...");
+                    addStudentToCourse();
                     break;
                 case 3:
-                    System.out.println("Removing a student from a course...");
+                    removeStudentFromCourse();
                     break;
                 case 4:
-                    System.out.println("Returning to main menu");
+                    PrintColor.printCyan("Returning to main menu");
+                    System.out.println();
                     return;
                 default:
                     PrintError.println("Invalid choice! Try again!");
@@ -45,17 +56,150 @@ public class CourseRegistrationUI{
         } while (true);
     }
 
+    public static void addStudentToCourse(){
+        if(StudentManagementUI.isEmptyOrPrintStudents()){
+            return;
+        }
+        int studentId = IntegerValidator.validate("Enter the student Id: ", new LengthContain(0, 1000));
+        if(STUDENT_SERVICE.findById(studentId) == null){
+            PrintError.println("Not found student");
+            return;
+        }
+        if(isEmptyOrPrintCourses()){
+            return;
+        }
+        int courseId = IntegerValidator.validate("Enter the course Id: ", new LengthContain(0, 1000));
+        if(COURSE_SERVICE.findbyId(courseId) == null){
+            PrintError.println("Not found course with id: " + courseId);
+            return;
+        }
+        if(ENROLLMENT_SERVICE.addStudentToEnrollment(courseId, studentId)){
+            PrintSuccess.println("Student has been added to the course with id: " + courseId);
+            System.out.println();
+        }else{
+            PrintError.println("Can't add to the course with id: " + courseId);
+            System.out.println();
+        }
+    }
 
-    public static void displayStudentByCourse(){
-//       if(isEmptyOrPrintCourses()){
-//           return;
-//       }
-//       int currentPage = 1;
-//       int coutseId = IntegerValidator.validate("Enter course Id: ", new LengthContain(0, 1000));
-//       int studentId = STUDENT_SERVICE.findStudentById(Account.currentAccount.getId());
-//       if(studentId == -1){
-//           PrintError.println("Student not found! Try again!");
-//       }
-//       ENROLLMENT_SERVICE.studentByCourse(studentId, currentPage, size, coutseId);
+    public static void removeStudentFromCourse(){
+        if(isEmptyOrPrintStudents()){
+            return;
+        }
+        int studentId = IntegerValidator.validate("Enter the student Id: ", new LengthContain(0, 1000));
+        if(STUDENT_SERVICE.findById(studentId) == null){
+            PrintError.println("Not found student");
+            return;
+        }
+
+        if(CourseRegistrationUI.ENROLLMENT_SERVICE.dislayCurrentAccCourse(studentId).isEmpty()){
+            PrintError.println("Student has not registered to any course");
+            return;
+        }
+
+        System.out.println("=".repeat(200));
+        System.out.printf("|%-10s | %-40s | %-20s | %-70s | %-20s | %-20s|%n",
+                "Course Id", "Course Name", "Duration", "Description", "Instructor", "Created At");
+        System.out.println("-".repeat(200));
+        CourseRegistrationUI.ENROLLMENT_SERVICE.dislayCurrentAccCourse(studentId).forEach(
+                course ->
+                        System.out.printf("|%-10d | %-40s | %-20d | %-70s | %-20s | %-20s|%n",
+                                course.getId(), course.getName(), course.getDuration(),
+                                course.getDescription(), course.getInstructor(),
+                                course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
+        );
+        int courseId =  IntegerValidator.validate("Enter course Id: ", new LengthContain(0, 1000));
+        System.out.println("-".repeat(200));
+        boolean confirmDelete = BooleanValidator.validateBoolean("Do you sure to delete this enrollment? (true/false)\n");
+        if(!confirmDelete){
+            PrintSuccess.println("You have cancelled the deletion of the enrollment!");
+            return;
+        }
+        if(CourseRegistrationUI.ENROLLMENT_SERVICE.removeStudentFromEnrollment(courseId, studentId)){
+            PrintSuccess.println("Student has been successfully removed!");
+            System.out.println();
+        }else{
+            PrintError.println("Can't remove from the course with id: " + courseId);
+            System.out.println();
+        }
+    }
+
+    public static void displayStudentsByCourse() {
+        if(isEmptyOrPrintStudents()){
+            return;
+        }
+
+        int studentId = IntegerValidator.validate("Enter the student Id: ", new LengthContain(0, 1000));
+        if(STUDENT_SERVICE.findById(studentId) == null){
+            PrintError.println("Not found student");
+            return;
+        }
+
+        Pagination<Course> firstPage = ENROLLMENT_SERVICE.findCourseByStudentId(studentId, FIRST_PAGE, PAGE_SIZE);
+        if (firstPage.getItems().isEmpty()) {
+            System.out.println();
+            PrintError.println("Course list is empty.");
+            System.out.println();
+            return;
+        }
+        int totalPage = firstPage.getTotalPages();
+        int currentPage = FIRST_PAGE;
+
+        while(true){
+            Pagination<Course> coursePage = ENROLLMENT_SERVICE.findCourseByStudentId(studentId, currentPage, PAGE_SIZE);
+            System.out.println("=".repeat(200));
+            System.out.printf("|%-10s | %-40s | %-20s | %-70s | %-20s | %-20s|%n",
+                    "Course Id", "Course Name", "Duration", "Description", "Instructor", "Created At");
+            System.out.println("-".repeat(200));
+
+            coursePage.getItems().forEach(course ->
+                    System.out.printf("|%-10d | %-40s | %-20d | %-70s | %-20s | %-20s|%n",
+                            course.getId(), course.getName(), course.getDuration(),
+                            course.getDescription(), course.getInstructor(),
+                            course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
+            );
+            System.out.printf("Page %d/%d%n", currentPage, totalPage);
+            StudentManagementUI.printPagination(currentPage, totalPage);
+            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.Prev", "2.Choose", "3.Next", "4.Exit");
+
+            int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
+            switch(subChoice){
+                case 1:
+                    if(currentPage > 1){
+                        currentPage--;
+                    }else{
+                        System.out.println();
+                        PrintError.println("You are already on the first page.");
+                        System.out.println();
+                    }
+                    break;
+                case 2:
+                    System.out.println();
+                    int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
+                    if(pageChoice >= 1 && pageChoice <= totalPage){
+                        currentPage = pageChoice;
+                    }else{
+                        System.out.println();
+                        PrintError.println("Invalid page number.");
+                        System.out.println();
+                    }
+                    break;
+                case 3:
+                    if(currentPage < totalPage){
+                        currentPage++;
+                    }else{
+                        PrintError.println("You are already on the last page.");
+                        System.out.println();
+                    }
+                    break;
+                case 4:
+                    PrintSuccess.println("Exiting choice page");
+                    System.out.println();
+                    return;
+                default:
+                    PrintError.println("Invalid choice. Please choose between 1, 2, 3 and 4.");
+                    System.out.println();
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ import ra.edu.business.service.studentService.StudentService;
 import ra.edu.utils.Input;
 import ra.edu.utils.Print.PrintError;
 import ra.edu.utils.Print.PrintSuccess;
+import ra.edu.utils.Print.printColor.PrintColor;
 import ra.edu.validate.*;
 
 import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
@@ -24,13 +25,13 @@ public class CourseManagementUI{
             System.out.println("+=============================================+");
             System.out.println("|         COURSE MANAGEMENT SYSTEM            |");
             System.out.println("+====+========================================+");
-            System.out.println("| 1. | Show all courses                       |");
-            System.out.println("| 2. | Add new course                         |");
-            System.out.println("| 3. | Update course (choose attribute to edit)|");
-            System.out.println("| 4. | Delete course (with confirmation)      |");
-            System.out.println("| 5. | Search by name (have pagination)       |");
-            System.out.println("| 6. | Sort by name (ascending/descending)    |");
-            System.out.println("| 7. | Return to management menu              |");
+            System.out.println("| 1 | Show all courses                        |");
+            System.out.println("| 2 | Add new course                          |");
+            System.out.println("| 3 | Update course (choose attribute to edit)|");
+            System.out.println("| 4 | Delete course (with confirmation)       |");
+            System.out.println("| 5 | Search by name (have pagination)        |");
+            System.out.println("| 6 | Sort by name (ascending/descending)     |");
+            System.out.println("| 7 | Return to management menu               |");
             System.out.println("+====+========================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 7);
 
@@ -55,7 +56,7 @@ public class CourseManagementUI{
                     sortCourseByName();
                     break;
                 case 7:
-                    System.out.println("Return to main menu.");
+                    PrintColor.printCyan("Return to main menu.");
                     return;
                 default:
                     PrintError.println("Invalid choice! Please choose between 1 and 7.");
@@ -74,7 +75,6 @@ public class CourseManagementUI{
 
         if (firstPage.getItems().isEmpty()) {
             PrintError.println("No courses found for name: " + searchName);
-            System.out.println();
             return;
         }
 

@@ -18,4 +18,5 @@ public interface StudentService extends BaseDAO<Student> {
     List<Student> sortStudentByName(boolean typeSort);
     List<Student> sortStudentByEmail(boolean typeSort);
     int findStudentById(int id);
+
 }

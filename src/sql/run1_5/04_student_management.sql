@@ -246,3 +246,13 @@ begin
     end if;
 end;
 delimiter //
+
+delimiter //
+drop procedure if exists find_student_by_acc_id;
+create procedure find_student_by_acc_id(in acc_id int)
+begin
+    select s_id
+    from student
+    where a_id = acc_id;
+end;
+delimiter //

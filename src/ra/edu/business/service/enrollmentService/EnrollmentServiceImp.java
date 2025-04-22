@@ -4,6 +4,7 @@ import ra.edu.business.dao.enrollmentDAO.EnrollmentDAO;
 import ra.edu.business.dao.enrollmentDAO.EnrollmentDAOimp;
 import ra.edu.business.model.Pagination;
 import ra.edu.business.model.course.Course;
+import ra.edu.business.model.enrollment.Enrollment;
 import ra.edu.business.model.student.Student;
 
 import java.util.List;
@@ -12,8 +13,13 @@ public class EnrollmentServiceImp implements EnrollmentService {
     private final static EnrollmentDAO ENROLLMENT_DAO = new EnrollmentDAOimp();
 
     @Override
-    public Pagination<Student> studentByCourse(int s_id, int page, int size, int c_id){
-        return ENROLLMENT_DAO.studentByCourse(s_id,page,size,c_id);
+    public Pagination<Student> studentByCourse(int c_id, int page, int size){
+        return ENROLLMENT_DAO.studentByCourse(c_id,page,size);
+    }
+
+    @Override
+    public List<Enrollment> findAll(){
+        return ENROLLMENT_DAO.findAll();
     }
 
     @Override
@@ -34,5 +40,10 @@ public class EnrollmentServiceImp implements EnrollmentService {
     @Override
     public List<Course> dislayCurrentAccCourse(int s_id){
         return ENROLLMENT_DAO.dislayCurrentAccCourse(s_id);
+    }
+
+    @Override
+    public Pagination<Course> findCourseByStudentId(int s_id, int page, int size){
+        return ENROLLMENT_DAO.findCourseByStudentId(s_id,page,size);
     }
 }

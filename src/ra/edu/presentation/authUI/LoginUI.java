@@ -8,6 +8,7 @@ import ra.edu.presentation.adminUI.AdminUI;
 import ra.edu.presentation.studentUI.StudentUI;
 import ra.edu.utils.Print.PrintError;
 import ra.edu.utils.Print.PrintSuccess;
+import ra.edu.utils.Print.printColor.PrintColor;
 import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.StringValidator;
 
@@ -34,7 +35,8 @@ public class LoginUI{
                     loginAsStudent();
                     break;
                 case 3:
-                    System.out.println("Good bye!");
+                    PrintColor.printCyan("Good bye!");
+                    System.out.println();
                     break;
                 default:
                     System.out.println("Please choose between 1 and 3!");
@@ -43,7 +45,7 @@ public class LoginUI{
     }
 
     public static void loginAsAdmin() {
-        System.out.println("\n+============================+");
+        System.out.println("+============================+");
         System.out.println("|      ADMIN LOGIN FORM      |");
         System.out.println("+============================+");
         String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
@@ -65,7 +67,7 @@ public class LoginUI{
 
 
     public static void loginAsStudent() {
-        System.out.println("\n+=============================+");
+        System.out.println("+=============================+");
         System.out.println("|     STUDENT LOGIN FORM      |");
         System.out.println("+=============================+");
         String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
@@ -76,12 +78,12 @@ public class LoginUI{
         if (account != null) {
             System.out.println("\n+-----------------------------+");
             PrintSuccess.println(" Logged in successfully! ");
-            System.out.println("+-----------------------------+\n");
+            System.out.println("+-----------------------------+");
             StudentUI.studentMainMenu();
         } else {
             System.out.println("\n+-----------------------------+");
             PrintError.println(" Incorrect username or password! ");
-            System.out.println("+-----------------------------+\n");
+            System.out.println("+-----------------------------+");
         }
     }
 

@@ -3,6 +3,7 @@ package ra.edu.business.model.course;
 import ra.edu.business.model.Inputable;
 import ra.edu.business.model.LengthContain;
 import ra.edu.utils.Input;
+import ra.edu.validate.CourseValidator;
 import ra.edu.validate.IntegerValidator;
 import ra.edu.validate.StringValidator;
 
@@ -13,20 +14,30 @@ public class Course implements Inputable{
     private int id;
     private String name;
     private int duration;
-//    private
+    private CourseStatus status;
     private String description;
     private String instructor;
     private LocalDateTime createdAt;
 
-    public Course(int id, String name, int duration, String description, String instructor, LocalDateTime createdAt){
+    public Course(int id, String name, int duration, CourseStatus status, String description, String instructor, LocalDateTime createdAt){
+        this.id = id;
         this.name = name;
         this.duration = duration;
+        this.status = status;
         this.description = description;
         this.instructor = instructor;
         this.createdAt = createdAt;
     }
 
     public Course(){
+    }
+
+    public CourseStatus getStatus(){
+        return status;
+    }
+
+    public void setStatus(CourseStatus status){
+        this.status = status;
     }
 
     public int getId(){
@@ -102,6 +113,10 @@ public class Course implements Inputable{
     public int inputCourseDuration(){
         return IntegerValidator.validate("Enter the course duration: ", new LengthContain(0, 255));
     }
+
+//    public CourseStatus inputCourseStatus(){
+//        return CourseValidator.validate();
+//    }
 
     @Override
     public String toString() {

@@ -33,9 +33,10 @@ create table course (
                         c_created_at datetime default(current_timestamp)
 );
 
+drop table if exists enrollment;
 create table enrollment (
                             e_id int primary key auto_increment,
-                            s_id int not null,
+                            s_id int not null unique,
                             c_id int not null,
                             e_status enum('WAITING', 'DENIED', 'CANCER', 'CONFIRMED') default 'WAITING',
                             e_registered_at datetime default current_timestamp,

@@ -60,5 +60,4 @@ public class Enrollment{
         this.registeredAt = registeredAt;
     }
 
-    
 }
