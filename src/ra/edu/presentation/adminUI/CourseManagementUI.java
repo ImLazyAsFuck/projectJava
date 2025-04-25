@@ -59,7 +59,7 @@ public class CourseManagementUI{
                     sortCourseByName();
                     break;
                 case 7:
-                    PrintColor.printCyan("Return to main menu.");
+                    PrintColor.printlnCyan("Return to main menu.\n");
                     return;
                 default:
                     PrintError.println("Invalid choice! Please choose between 1 and 7.");
@@ -100,6 +100,9 @@ public class CourseManagementUI{
             System.out.println("-".repeat(200));
 
             printPagination(currentPage, totalPage);
+            if(totalPage <= 1){
+                return;
+            }
 
             StringBuilder options = new StringBuilder();
             List<String> validChoices = new ArrayList<>();

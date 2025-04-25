@@ -50,7 +50,7 @@ public class StudentUI{
                     changePassword();
                     break;
                 case 6:
-                    PrintColor.printCyan("Return to menu");
+                    PrintColor.printlnCyan("Return to menu");
                     System.out.println();
                     return;
                 default:
@@ -71,9 +71,6 @@ public class StudentUI{
         int courseId = IntegerValidator.validate("Enter course Id: ", new LengthContain(0, 1000));
         if(CourseRegistrationUI.ENROLLMENT_SERVICE.addStudentToEnrollment(courseId, studentId)){
             PrintSuccess.println("You has been successfully registered!");
-            System.out.println();
-        }else{
-            PrintError.println("Can't register to the course with id: " + courseId);
             System.out.println();
         }
     }
@@ -96,9 +93,6 @@ public class StudentUI{
         int courseId =  IntegerValidator.validate("Enter course Id: ", new LengthContain(0, 1000));
         if(CourseRegistrationUI.ENROLLMENT_SERVICE.studentCancelfromEnrollment(courseId, studentId)){
             PrintSuccess.println("You has been successfully removed!");
-            System.out.println();
-        }else{
-            PrintError.println("Can't remove from the course with id: " + courseId);
             System.out.println();
         }
     }
@@ -133,12 +127,12 @@ public class StudentUI{
                 "Course Id", "Course Name", "Duration", "Description", "Instructor", "Created At");
         System.out.println("-".repeat(200));
         CourseRegistrationUI.ENROLLMENT_SERVICE.dislayCurrentAccCourse(studentId).forEach(
-                course ->
-                        System.out.printf("|%-10d | %-40s | %-20d | %-70s | %-20s | %-20s|%n",
-                                course.getId(), course.getName(), course.getDuration(),
-                                course.getDescription(), course.getInstructor(),
-                                course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
+                course -> System.out.printf("|%-10d | %-40s | %-20d | %-70s | %-20s | %-20s|%n",
+                        course.getId(), course.getName(), course.getDuration(),
+                        course.getDescription(), course.getInstructor(),
+                        course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
         );
         System.out.println("-".repeat(200));
+
     }
 }

@@ -23,15 +23,15 @@ public class StatisticUI{
     public static void displayStatisticMenu(){
         int choice;
         while(true){
-            System.out.println("+========================================================+");
-            System.out.println("|                  STATISTICS MANAGEMENT MENU            |");
-            System.out.println("+========================================================+");
-            System.out.println("| 1. | Display total number of courses and students      |");
-            System.out.println("| 2. | Display number of students in each course         |");
-            System.out.println("| 3. | Show top 5 courses with the most students         |");
-            System.out.println("| 4. | List all courses with more than 10 students       |");
-            PrintColor.printlnCyan("| 5. | Return to main menu                               |");
-            System.out.println("+========================================================+");
+            PrintColor.printlnYellow("+========================================================+");
+            PrintColor.printlnYellow("|                  STATISTICS MANAGEMENT MENU            |");
+            PrintColor.printlnYellow("+========================================================+");
+            PrintColor.printlnYellow("| 1. | Display total number of courses and students      |");
+            PrintColor.printlnYellow("| 2. | Display number of students in each course         |");
+            PrintColor.printlnYellow("| 3. | Show top 5 courses with the most students         |");
+            PrintColor.printlnYellow("| 4. | List all courses with more than 10 students       |");
+            PrintColor.printlnRed("| 5. | Return to main menu                               |");
+            PrintColor.printlnYellow("+========================================================+");
 
             choice = ChoiceValidator.validateChoice("Enter choice: ", 5);
             System.out.println();
@@ -49,7 +49,7 @@ public class StatisticUI{
                     displayCourseHaveMore10Student();
                     break;
                 case 5:
-                    PrintColor.printCyan("Returning to main menu...");
+                    PrintColor.printlnCyan("Returning to main menu...");
                     return;
                 default:
                     System.out.println("Invalid choice! Try again.");
@@ -60,13 +60,13 @@ public class StatisticUI{
     public static void displayTotalCourseAndStudent(){
         int choice;
         while(true){
-            System.out.println("+=============================================+");
-            System.out.println("|     COURSE & STUDENT STATISTICS MENU        |");
-            System.out.println("+=============================================+");
-            System.out.println("| 1. | Display total number of courses         |");
-            System.out.println("| 2. | Display total number of students        |");
-            System.out.println("| 3. | Return to main menu                     |");
-            System.out.println("+=============================================+");
+            PrintColor.printlnBlue("+=============================================+");
+            PrintColor.printlnBlue("|     COURSE & STUDENT STATISTICS MENU        |");
+            PrintColor.printlnBlue("+=============================================+");
+            PrintColor.printlnBlue("| 1. | Display total number of courses         |");
+            PrintColor.printlnBlue("| 2. | Display total number of students        |");
+            PrintColor.printlnRed("| 3. | Return to main menu                     |");
+            PrintColor.printlnBlue("+=============================================+");
 
             choice = ChoiceValidator.validateChoice("Enter choice(1-3): ", 3);
             System.out.println();
@@ -80,7 +80,7 @@ public class StatisticUI{
                     System.out.println();
                     break;
                 case 3:
-                    PrintColor.printCyan("Returning to main menu...");
+                    PrintColor.printlnCyan("Returning to main menu...");
                     System.out.println();
                     return;
                 default:
@@ -302,13 +302,13 @@ public class StatisticUI{
             PrintError.println("There are no courses with more than 10 students!");
             System.out.println();
         }
-        System.out.println("=".repeat(67));
-        System.out.println("| Course Name                                           | Student Count |");
-        System.out.println("-".repeat(67));
+        System.out.println("=".repeat(77));
+        System.out.println("| Course Name                                             | Student Count |");
+        System.out.println("-".repeat(77));
         STATISTIC_SERVICE.findTop5CoursesByStudentCount().forEach(entry ->
                 entry.forEach((courseName, studentCount) -> {
                     System.out.printf("| %-55s | %-13d |\n", courseName, studentCount);
                 }));
-        System.out.println("-".repeat(67));
+        System.out.println("-".repeat(77));
     }
 }

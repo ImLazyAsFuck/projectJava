@@ -69,6 +69,7 @@ public class StudentDAOImp implements StudentDAO{
             while(rs.next()){
                 Student student = new Student();
                 student.setId(rs.getInt("s_id"));
+                student.setFullName(rs.getString("s_full_name"));
                 student.setEmail(rs.getString("s_email"));
                 student.setSex(rs.getBoolean("s_sex"));
                 student.setDob(rs.getDate("s_dob").toLocalDate());
@@ -76,9 +77,9 @@ public class StudentDAOImp implements StudentDAO{
                 student.setCreatedAt(rs.getTimestamp("s_created_at").toLocalDateTime());
                 list.add(student);
             }
-            int totalItems = cs.getInt(3);
-            int totalPages = (int) Math.ceil((double) totalItems / size);
-            if (page > totalPages && totalPages > 0) {
+            int totalItems = cs.getInt(4);
+            int totalPages = (int)Math.ceil((double)totalItems / size);
+            if(page > totalPages && totalPages > 0){
                 page = totalPages;
             }
             if(totalPages == 0){
@@ -87,7 +88,6 @@ public class StudentDAOImp implements StudentDAO{
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-//            pagination.setCurrentPage(page);
             pagination.setPageSize(size);
             pagination.setItems(list);
         }catch(SQLException e){
@@ -117,6 +117,7 @@ public class StudentDAOImp implements StudentDAO{
             while(rs.next()){
                 Student student = new Student();
                 student.setId(rs.getInt("s_id"));
+                student.setFullName(rs.getString("s_full_name"));
                 student.setEmail(rs.getString("s_email"));
                 student.setSex(rs.getBoolean("s_sex"));
                 student.setDob(rs.getDate("s_dob").toLocalDate());
@@ -124,9 +125,9 @@ public class StudentDAOImp implements StudentDAO{
                 student.setCreatedAt(rs.getTimestamp("s_created_at").toLocalDateTime());
                 list.add(student);
             }
-            int totalItems = cs.getInt(3);
-            int totalPages = (int) Math.ceil((double) totalItems / size);
-            if (page > totalPages && totalPages > 0) {
+            int totalItems = cs.getInt(4);
+            int totalPages = (int)Math.ceil((double)totalItems / size);
+            if(page > totalPages && totalPages > 0){
                 page = totalPages;
             }
             if(totalPages == 0){

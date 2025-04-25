@@ -3,6 +3,7 @@ package ra.edu.business.dao.enrollmentDAO;
 import ra.edu.business.config.ConnectionDB;
 import ra.edu.business.model.Pagination;
 import ra.edu.business.model.course.Course;
+import ra.edu.business.model.course.CourseStatus;
 import ra.edu.business.model.enrollment.Enrollment;
 import ra.edu.business.model.enrollment.EnrollmentStatus;
 import ra.edu.business.model.student.Student;
@@ -192,14 +193,13 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
                 course.setName(rs.getString("c_name"));
                 course.setDuration(rs.getInt("c_duration"));
                 course.setDescription(rs.getString("c_description"));
-//                course.set(rs.getString("c_status"));
                 course.setInstructor(rs.getString("c_instructor"));
                 course.setCreatedAt(rs.getTimestamp("c_created_at").toLocalDateTime());
                 courseList.add(course);
             }
             return courseList;
         }catch(SQLException e){
-            PrintError.println("Error while getting student by course");
+            PrintError.println("Error while getting student by course" + e.getMessage() );
         }catch(Exception e){
             PrintError.println("Unknown error while getting student by course");
         }
@@ -337,8 +337,8 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
         try {
             con = ConnectionDB.openConnection();
             cs = con.prepareCall("{call student_cancel_enrollment(?,?,?)}");
-            cs.setInt(1, studentId);
-            cs.setInt(2, courseId);
+            cs.setInt(1, courseId);
+            cs.setInt(2, studentId);
             cs.registerOutParameter(3, Types.INTEGER);
             cs.execute();
             int resultCode = cs.getInt(3);
@@ -355,7 +355,7 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
                     PrintError.println("This student is not enrolled in this course!");
                     break;
                 case 4:
-                    PrintError.println("Cannot delete: Course registration has been confirmed!");
+                    PrintError.println("Cannot cancel: Course registration has been confirmed!");
                     break;
                 case 5:
                     PrintError.println("Student got denied for this course!");

@@ -40,7 +40,7 @@ public class AdminUI{
                     StatisticUI.displayStatisticMenu();
                     break;
                 case 5:
-                    PrintColor.printCyan("Logout successful!");
+                    PrintColor.printlnCyan("Logout successful!");
                     System.out.println();
                     return;
                 default:

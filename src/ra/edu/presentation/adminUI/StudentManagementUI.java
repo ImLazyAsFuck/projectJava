@@ -59,7 +59,7 @@ public class StudentManagementUI{
                     sortStudent();
                     break;
                 case 7:
-                    System.out.println("Returning to main menu");
+                    PrintColor.printlnCyan("Returning to main menu\n");
                     return;
                 default:
                     PrintError.println("Invalid choice! Try again!");
@@ -74,12 +74,12 @@ public class StudentManagementUI{
         }
 
         System.out.println("=".repeat(160));
-        System.out.printf("|%-10s | %-30s | %-12s | %-10s | %-15s | %-30s | %-20s|%n",
+        System.out.printf("| %-10s | %-30s | %-12s | %-10s | %-15s | %-30s | %-20s|%n",
                 "Student Id", "Full Name", "DOB", "Sex", "Phone", "Email", "Created At");
         System.out.println("-".repeat(160));
 
         STUDENT_SERVICE.findAll().forEach(student ->
-                System.out.printf("|%-10d | %-30s | %-12s | %-10s | %-15s | %-30s | %-20s|%n",
+                System.out.printf("| %-10d | %-30s | %-12s | %-10s | %-15s | %-30s | %-20s|%n",
                         student.getId(),
                         student.getFullName(),
                         student.getDob() != null? student.getDob().toString() : "N/A",
@@ -88,6 +88,7 @@ public class StudentManagementUI{
                         student.getEmail(),
                         student.getCreatedAt() != null? student.getCreatedAt().toString() : "N/A")
         );
+        System.out.println("-".repeat(160));
         return false;
     }
 
@@ -121,6 +122,7 @@ public class StudentManagementUI{
                         student.getCreatedAt() != null? student.getCreatedAt().toString() : "N/A"
                 );
             });
+            System.out.println("-".repeat(200));
 
             printPagination(currentPage, totalPage);
             if(totalPage <= 1){
@@ -331,24 +333,28 @@ public class StudentManagementUI{
             return;
         }
         while(true){
-            System.out.println("+=============================================+");
-            System.out.println("|               SEARCH STUDENT MENU           |");
-            System.out.println("+====+========================================+");
-            System.out.println("| 1. | Search Student by ID                   |");
-            System.out.println("| 2. | Search Student by Name                 |");
-            System.out.println("| 3. | Search Student by Email                |");
-            System.out.println("+====+========================================+");
-            int choice = ChoiceValidator.validateChoice("Enter choice: ", 3);
+            PrintColor.printlnBlue("+=============================================+");
+            PrintColor.printlnBlue("|               SEARCH STUDENT MENU           |");
+            PrintColor.printlnBlue("+====+========================================+");
+            PrintColor.printlnBlue("| 1. | Search Student by ID                   |");
+            PrintColor.printlnBlue("| 2. | Search Student by Name                 |");
+            PrintColor.printlnBlue("| 3. | Search Student by Email                |");
+            PrintColor.printlnRed("| 4. | Exit                                   |");
+            PrintColor.printlnBlue("+====+========================================+");
+            int choice = ChoiceValidator.validateChoice("Enter choice: ", 4);
             System.out.println();
             switch(choice){
                 case 1:
                     searchStudentById();
-                    return;
+                    break;
                 case 2:
                     searchStudentByName();
-                    return;
+                    break;
                 case 3:
                     searchStudentByEmail();
+                    break;
+                case 4:
+                    PrintColor.printlnCyan("Goodbye!\n");
                     return;
                 default:
                     PrintError.println("Invalid choice! Please choose between 1 and 4.");
@@ -387,7 +393,7 @@ public class StudentManagementUI{
         int currentPage = FIRST_PAGE;
         Pagination<Student> foundStudent = STUDENT_SERVICE.findByEmail(email, FIRST_PAGE, PAGE_SIZE);
 
-        if (foundStudent == null) {
+        if (foundStudent.getItems().isEmpty()) {
             PrintError.println("Student not found.");
             System.out.println();
             return;
@@ -396,13 +402,13 @@ public class StudentManagementUI{
         int totalPage = foundStudent.getTotalPages();
 
         while(true){
-            System.out.println("=".repeat(200));
-            System.out.printf("%-5s | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s\n",
+            System.out.println("=".repeat(220));
+            System.out.printf("| %-5s | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s |\n",
                     "ID", "Full Name", "DOB", "Sex", "Phone", "Email", "Created At");
-            System.out.println("-----------------------------------------------------------------------------------------------");
+            System.out.println("-".repeat(220));
 
             foundStudent.getItems().forEach(student ->
-                    System.out.printf("%-5d | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s\n",
+                    System.out.printf("| %-5d | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s |\n",
                             student.getId(),
                             student.getFullName(),
                             student.getDob(),
@@ -411,6 +417,7 @@ public class StudentManagementUI{
                             student.getEmail(),
                             student.getCreatedAt())
             );
+            System.out.println("-".repeat(220));
             printPagination(currentPage, totalPage);
 
             if(totalPage <= 1){
@@ -483,7 +490,7 @@ public class StudentManagementUI{
         int currentPage = FIRST_PAGE;
         Pagination<Student> foundStudent = STUDENT_SERVICE.findByName(name, FIRST_PAGE, PAGE_SIZE);
 
-        if (foundStudent == null) {
+        if (foundStudent.getItems().isEmpty()) {
             PrintError.println("Student not found.");
             System.out.println();
             return;
@@ -492,13 +499,13 @@ public class StudentManagementUI{
         int totalPage = foundStudent.getTotalPages();
 
         while(true){
-            System.out.println("=".repeat(200));
-            System.out.printf("%-5s | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s\n",
+            System.out.println("=".repeat(220));
+            System.out.printf("| %-5s | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s |\n",
                     "ID", "Full Name", "DOB", "Sex", "Phone", "Email", "Created At");
-            System.out.println("-----------------------------------------------------------------------------------------------");
+            System.out.println("-".repeat(220));
 
             foundStudent.getItems().forEach(student ->
-                    System.out.printf("%-5d | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s\n",
+                    System.out.printf("| %-5d | %-20s | %-10s | %-6s | %-12s | %-25s | %-20s |\n",
                             student.getId(),
                             student.getFullName(),
                             student.getDob(),
