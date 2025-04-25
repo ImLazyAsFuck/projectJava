@@ -58,9 +58,9 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
             pagination.setItems(list);
             return pagination;
         } catch(SQLException e) {
-            PrintError.println("Error while fetching students: " + e.getMessage());
+            PrintError.println("Error while fetching students");
         } catch(Exception e) {
-            PrintError.println("Unknown error while fetching students: " + e.getMessage());
+            PrintError.println("Unknown error while fetching students");
         } finally {
             ConnectionDB.closeConnection(con, cs);
         }
@@ -82,23 +82,28 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
             int return_code = cs.getInt(3);
             switch (return_code) {
                 case 0: return true;
-                case 1: PrintError.println("Student does not exist.");
+                case 1:
+                    PrintError.println("Student does not exist.");
                     break;
-                case 2: PrintError.println("Course does not exist.");
+                case 2:
+                    PrintError.println("Course does not exist.");
                     break;
-                case 3: PrintError.println("Student is already enrolled.");
+                case 3:
+                    PrintError.println("Student is denied for this enrollment.");
                     break;
-                case 4: PrintError.println("Student is blocked.");
+                case 4:
+                    PrintError.println("Student enroll is already confirmed by the instructor. Cannot add.");
                     break;
-                case 5: PrintError.println("Student is not active.");
+                case 5:
+                    PrintError.println("Student status is inactive or block can't not add");
                     break;
                 default: PrintError.println("Unknown error.");
             }
 
         }catch (SQLException e){
-            PrintError.println("Error while adding student to enrollment: " + e.getMessage());
+            PrintError.println("Error while adding student to enrollment");
         }catch (Exception e){
-            PrintError.println("Unknown error while adding student to enrollment: " + e.getMessage());
+            PrintError.println("Unknown error while adding student to enrollment");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -137,9 +142,9 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
             }
 
         }catch(SQLException e){
-            PrintError.println("Error while deleting student from enrollment: " + e.getMessage());
+            PrintError.println("Error while deleting student from enrollment");
         }catch(Exception e){
-            PrintError.println("Unknown error while deleting student from enrollment: " + e.getMessage());
+            PrintError.println("Unknown error while deleting student from enrollment");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -194,9 +199,9 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
             }
             return courseList;
         }catch(SQLException e){
-            PrintError.println("Error while getting student by course: " + e.getMessage());
+            PrintError.println("Error while getting student by course");
         }catch(Exception e){
-            PrintError.println("Unknown error while getting student by course: " + e.getMessage());
+            PrintError.println("Unknown error while getting student by course");
         }
         return courseList;
     }
@@ -220,7 +225,9 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
             }
             return list;
         }catch(SQLException e){
-            PrintError.println("Error while finding all enrollments: " + e.getMessage());
+            PrintError.println("Error while finding all enrollments");
+        }catch(Exception e){
+            PrintError.println("Unknown error while finding all enrollments");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -267,9 +274,9 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
             pagination.setItems(list);
             return pagination;
         }catch(SQLException e){
-            PrintError.println("Error while finding courses by student id: " + e.getMessage());
+            PrintError.println("Error while finding courses by student id");
         }catch(Exception e){
-            PrintError.println("Unknown error while finding courses by student id: " + e.getMessage());
+            PrintError.println("Unknown error while finding courses by student id");
         }
         finally{
             ConnectionDB.closeConnection(con, cs);
@@ -293,27 +300,74 @@ public class EnrollmentDAOimp implements EnrollmentDAO{
                 case 0:
                     return true;
                 case 1:
-                    PrintError.println("Student is not enrolled in this course or IDs do not match!");
+                    PrintError.println("Student ID does not exist!");
                     break;
                 case 2:
-                    PrintError.println("This student was denied. Cannot approve.");
+                    PrintError.println("Course ID does not exist!");
                     break;
                 case 3:
-                    PrintError.println("This student cancelled the enrollment. Cannot approve.");
+                    PrintError.println("Student is not enrolled in this course!");
                     break;
                 case 4:
-                    PrintError.println("This student has already been approved!");
+                    PrintError.println("Student has already been approved for this course!");
                     break;
                 case 5:
-                    PrintError.println("Unknown enrollment status. Cannot proceed.");
+                    PrintError.println("This student registration status is invalid!");
+                    break;
+                case 6:
+                    PrintError.println("Student status is inactive or blocked!");
                     break;
                 default:
                     PrintError.println("Unexpected return code while approving student: " + resultCode);
             }
         }catch(SQLException e){
-            PrintError.println("Error while approving student: " + e.getMessage());
+            PrintError.println("Error while approving student");
         }catch(Exception e){
-            PrintError.println("Unknown error while approving student: " + e.getMessage());
+            PrintError.println("Unknown error while approving student");
+        }finally{
+            ConnectionDB.closeConnection(con, cs);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean studentCancelfromEnrollment(int courseId, int studentId){
+        Connection con = ConnectionDB.openConnection();
+        CallableStatement cs = null;
+        try {
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call student_cancel_enrollment(?,?,?)}");
+            cs.setInt(1, studentId);
+            cs.setInt(2, courseId);
+            cs.registerOutParameter(3, Types.INTEGER);
+            cs.execute();
+            int resultCode = cs.getInt(3);
+            switch (resultCode) {
+                case 0:
+                    return true;
+                case 1:
+                    PrintError.println("Student ID does not exist!");
+                    break;
+                case 2:
+                    PrintError.println("Course ID does not exist!");
+                    break;
+                case 3:
+                    PrintError.println("This student is not enrolled in this course!");
+                    break;
+                case 4:
+                    PrintError.println("Cannot delete: Course registration has been confirmed!");
+                    break;
+                case 5:
+                    PrintError.println("Student got denied for this course!");
+                    break;
+                default:
+                    PrintError.println("Unknown error from stored procedure!");
+            }
+
+        }catch(SQLException e){
+            PrintError.println("Error while deleting student from enrollment");
+        }catch(Exception e){
+            PrintError.println("Unknown error while deleting student from enrollment");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }

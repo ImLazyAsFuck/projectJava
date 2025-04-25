@@ -1,5 +1,6 @@
 package ra.edu.presentation.adminUI;
 
+import ra.edu.business.model.Account.Account;
 import ra.edu.utils.Print.PrintError;
 import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.utils.Print.printColor.PrintColor;
@@ -12,15 +13,17 @@ public class AdminUI{
     public static void showAdminMenu() {
         int choice;
         do {
-            System.out.println("+========================================+");
-            System.out.println("|              ADMIN MENU                |");
-            System.out.println("+====+===================================+");
-            System.out.println("| 1. | Manage Courses                    |");
-            System.out.println("| 2. | Manage Students                   |");
-            System.out.println("| 3. | Manage Course Registrations       |");
-            System.out.println("| 4. | Statistics by Course              |");
-            System.out.println("| 5. | Logout                            |");
-            System.out.println("+====+===================================+");
+            PrintColor.printlnCyan("\n+========================================+");
+            PrintColor.printCyan("|             ");
+            PrintColor.printCyan("ADMIN MENU");
+            PrintColor.printCyan("                 |\n");
+            PrintColor.printlnCyan("+====+===================================+");
+            PrintColor.printlnCyan("| 1. | Manage Courses                    |");
+            PrintColor.printlnCyan("| 2. | Manage Students                   |");
+            PrintColor.printlnCyan("| 3. | Manage Course Registrations       |");
+            PrintColor.printlnCyan("| 4. | Statistics by Course              |");
+            PrintColor.printlnRed("| 5. | Logout                            |");
+            PrintColor.printlnCyan("+====+===================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 5);
             System.out.println();
             switch (choice) {
@@ -34,10 +37,11 @@ public class AdminUI{
                     CourseRegistrationUI.courseRegistrationMenu();
                     break;
                 case 4:
-
+                    StatisticUI.displayStatisticMenu();
                     break;
                 case 5:
                     PrintColor.printCyan("Logout successful!");
+                    System.out.println();
                     return;
                 default:
                     PrintError.println("Invalid choice! Please choose either 1 or 5!");

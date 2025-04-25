@@ -3,18 +3,19 @@ package ra.edu.presentation.adminUI;
 import ra.edu.business.model.Account.Account;
 import ra.edu.business.model.LengthContain;
 import ra.edu.business.model.Pagination;
-import ra.edu.business.model.course.Course;
 import ra.edu.business.model.student.Student;
 import ra.edu.business.service.studentService.StudentService;
 import ra.edu.business.service.studentService.StudentServiceImp;
 import ra.edu.utils.Print.PrintError;
 import ra.edu.utils.Print.PrintSuccess;
+import ra.edu.utils.Print.printColor.PrintColor;
 import ra.edu.validate.BooleanValidator;
 import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.IntegerValidator;
 import ra.edu.validate.StringValidator;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
 import static ra.edu.presentation.adminUI.AdminUI.PAGE_SIZE;
@@ -25,17 +26,17 @@ public class StudentManagementUI{
     public static void displayStudentManagement(){
         int choice;
         do{
-            System.out.println("\n+===============================================================+");
-            System.out.println("|                  STUDENT MANAGEMENT MENU                      |");
-            System.out.println("+====+==========================================================+");
-            System.out.println("| 1. | Display the list of students                             |");
-            System.out.println("| 2. | Add a new student                                        |");
-            System.out.println("| 3. | Edit student information (select attribute to edit)      |");
-            System.out.println("| 4. | Delete a student (Soft delete from course)               |");
-            System.out.println("| 5. | Search by name, email, id                                |");
-            System.out.println("| 6. | Sort by name or email (ascending/descending)             |");
-            System.out.println("| 7. | Return to main menu                                      |");
-            System.out.println("+====+==========================================================+");
+            PrintColor.printlnYellow("\n+===============================================================+");
+            PrintColor.printlnYellow("|                  STUDENT MANAGEMENT MENU                      |");
+            PrintColor.printlnYellow("+====+==========================================================+");
+            PrintColor.printlnYellow("| 1. | Display the list of students                             |");
+            PrintColor.printlnYellow("| 2. | Add a new student                                        |");
+            PrintColor.printlnYellow("| 3. | Edit student information (select attribute to edit)      |");
+            PrintColor.printlnYellow("| 4. | Delete a student (Soft delete from course)               |");
+            PrintColor.printlnYellow("| 5. | Search by name, email, id                                |");
+            PrintColor.printlnYellow("| 6. | Sort by name or email (ascending/descending)             |");
+            PrintColor.printlnRed("| 7. | Return to main menu                                      |");
+            PrintColor.printlnYellow("+====+==========================================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 7);
             System.out.println();
             switch(choice){
@@ -121,46 +122,66 @@ public class StudentManagementUI{
                 );
             });
 
-            System.out.printf("Page %d/%d%n", currentPage, totalPage);
             printPagination(currentPage, totalPage);
-            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.Prev", "2.Choose", "3.Next", "4.Exit");
+            if(totalPage <= 1){
+                return;
+            }
+            StringBuilder options = new StringBuilder();
+            List<String> validChoices = new ArrayList<>();
 
-            int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
-            switch(subChoice){
-                case 1:
-                    if(currentPage > 1){
+            if (currentPage > AdminUI.FIRST_PAGE) {
+                options.append(String.format("%-20s", "P.Prev"));
+                validChoices.add("1");
+            }
+            if (totalPage > 1) {
+                options.append(String.format("%-20s", "C.Choose"));
+                validChoices.add("2");
+            }
+            if (currentPage < totalPage) {
+                options.append(String.format("%-20s", "N.Next"));
+                validChoices.add("3");
+            }
+            options.append(String.format("%-20s", "E.Exit"));
+            validChoices.add("4");
+
+            System.out.println(options.toString());
+
+            String subChoice = StringValidator.validate("Enter choice: ", new LengthContain(0, 1));
+            switch (subChoice.toLowerCase()) {
+                case "p":
+                    if (currentPage > 1) {
                         currentPage--;
-                    }else{
+                    } else {
                         System.out.println();
                         PrintError.println("You are already on the first page.");
                         System.out.println();
                     }
                     break;
-                case 2:
+                case "c":
                     System.out.println();
                     int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
-                    if(pageChoice >= 1 && pageChoice <= totalPage){
+                    if (pageChoice >= 1 && pageChoice <= totalPage) {
                         currentPage = pageChoice;
-                    }else{
+                    } else {
                         System.out.println();
                         PrintError.println("Invalid page number.");
                         System.out.println();
                     }
                     break;
-                case 3:
-                    if(currentPage < totalPage){
+                case "n":
+                    if (currentPage < totalPage) {
                         currentPage++;
-                    }else{
+                    } else {
                         PrintError.println("You are already on the last page.");
                         System.out.println();
                     }
                     break;
-                case 4:
+                case "e":
                     PrintSuccess.println("Exiting choice page");
                     System.out.println();
                     return;
                 default:
-                    PrintError.println("Invalid choice. Please choose between 1, 2, 3 and 4.");
+                    PrintError.println("Invalid choice. Please choose P, C, N and E.");
                     System.out.println();
             }
         }
@@ -344,8 +365,6 @@ public class StudentManagementUI{
             System.out.println();
             return;
         }
-
-//        PrintSuccess.println("Student found.");
         System.out.println("---------------------------------------------------------------------------------------------------------------");
         System.out.printf("| %-4s | %-20s | %-10s | %-6s | %-12s | %-25s | %-19s |%n",
                 "ID", "Full Name", "DOB", "Sex", "Phone", "Email", "Created At");
@@ -392,40 +411,68 @@ public class StudentManagementUI{
                             student.getEmail(),
                             student.getCreatedAt())
             );
-            System.out.printf("Page %d/%d%n", currentPage, totalPage);
             printPagination(currentPage, totalPage);
 
-            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.prev", "2.choose page", "3.next", "4.exit");
-            int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
+            if(totalPage <= 1){
+                return;
+            }
+            StringBuilder options = new StringBuilder();
+            List<String> validChoices = new ArrayList<>();
 
-            switch (subChoice) {
-                case 1:
+            if (currentPage > AdminUI.FIRST_PAGE) {
+                options.append(String.format("%-20s", "P.Prev"));
+                validChoices.add("1");
+            }
+            if (totalPage > 1) {
+                options.append(String.format("%-20s", "C.Choose"));
+                validChoices.add("2");
+            }
+            if (currentPage < totalPage) {
+                options.append(String.format("%-20s", "N.Next"));
+                validChoices.add("3");
+            }
+            options.append(String.format("%-20s", "E.Exit"));
+            validChoices.add("4");
+
+            System.out.println(options.toString());
+
+            String subChoice = StringValidator.validate("Enter choice: ", new LengthContain(0, 1));
+            switch (subChoice.toLowerCase()) {
+                case "p":
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
+                        System.out.println();
                         PrintError.println("You are already on the first page.");
+                        System.out.println();
                     }
                     break;
-                case 2:
+                case "c":
+                    System.out.println();
                     int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
                     if (pageChoice >= 1 && pageChoice <= totalPage) {
                         currentPage = pageChoice;
                     } else {
+                        System.out.println();
                         PrintError.println("Invalid page number.");
+                        System.out.println();
                     }
                     break;
-                case 3:
+                case "n":
                     if (currentPage < totalPage) {
                         currentPage++;
                     } else {
                         PrintError.println("You are already on the last page.");
+                        System.out.println();
                     }
                     break;
-                case 4:
+                case "e":
                     PrintSuccess.println("Exiting choice page");
+                    System.out.println();
                     return;
                 default:
-                    PrintError.println("Invalid choice. Please choose between 1, 2, 3 and 4.");
+                    PrintError.println("Invalid choice. Please choose P, C, N and E.");
+                    System.out.println();
             }
         }
     }
@@ -460,40 +507,68 @@ public class StudentManagementUI{
                             student.getEmail(),
                             student.getCreatedAt())
             );
-            System.out.printf("Page %d/%d%n", currentPage, totalPage);
             printPagination(currentPage, totalPage);
 
-            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.prev", "2.choose page", "3.next", "4.exit");
-            int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
+            if(totalPage <= 1){
+                return;
+            }
+            StringBuilder options = new StringBuilder();
+            List<String> validChoices = new ArrayList<>();
 
-            switch (subChoice) {
-                case 1:
+            if (currentPage > AdminUI.FIRST_PAGE) {
+                options.append(String.format("%-20s", "P.Prev"));
+                validChoices.add("1");
+            }
+            if (totalPage > 1) {
+                options.append(String.format("%-20s", "C.Choose"));
+                validChoices.add("2");
+            }
+            if (currentPage < totalPage) {
+                options.append(String.format("%-20s", "N.Next"));
+                validChoices.add("3");
+            }
+            options.append(String.format("%-20s", "E.Exit"));
+            validChoices.add("4");
+
+            System.out.println(options.toString());
+
+            String subChoice = StringValidator.validate("Enter choice: ", new LengthContain(0, 1));
+            switch (subChoice.toLowerCase()) {
+                case "p":
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
+                        System.out.println();
                         PrintError.println("You are already on the first page.");
+                        System.out.println();
                     }
                     break;
-                case 2:
+                case "c":
+                    System.out.println();
                     int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
                     if (pageChoice >= 1 && pageChoice <= totalPage) {
                         currentPage = pageChoice;
                     } else {
+                        System.out.println();
                         PrintError.println("Invalid page number.");
+                        System.out.println();
                     }
                     break;
-                case 3:
+                case "n":
                     if (currentPage < totalPage) {
                         currentPage++;
                     } else {
                         PrintError.println("You are already on the last page.");
+                        System.out.println();
                     }
                     break;
-                case 4:
+                case "e":
                     PrintSuccess.println("Exiting choice page");
+                    System.out.println();
                     return;
                 default:
-                    PrintError.println("Invalid choice. Please choose between 1, 2, 3 and 4.");
+                    PrintError.println("Invalid choice. Please choose P, C, N and E.");
+                    System.out.println();
             }
         }
     }

@@ -2,7 +2,12 @@ package ra.edu.business.model.course;
 
 import ra.edu.business.model.Inputable;
 import ra.edu.business.model.LengthContain;
+import ra.edu.business.service.courseService.CourseService;
+import ra.edu.presentation.adminUI.CourseManagementUI;
 import ra.edu.utils.Input;
+import ra.edu.utils.Print.PrintError;
+import ra.edu.utils.Print.PrintSuccess;
+import ra.edu.validate.BooleanValidator;
 import ra.edu.validate.CourseValidator;
 import ra.edu.validate.IntegerValidator;
 import ra.edu.validate.StringValidator;
@@ -91,11 +96,31 @@ public class Course implements Inputable{
     @Override
     public void inputData(){
         this.name = inputCourseName();
+        int nameCheckResult = CourseManagementUI.COURSE_SERVICE.isNameUnique(name);
+        if (nameCheckResult == 2) {
+            handleDeletedCourseReactivation();
+            return;
+        }
         this.duration = inputCourseDuration();
         this.description = inputCourseDescription();
         this.instructor = inputCourseInstructor();
         this.createdAt = LocalDateTime.now();
     }
+
+    private void handleDeletedCourseReactivation() {
+        System.out.println("Course is already existed but got deleted. Do you want to active it? (true/false)");
+        boolean confirm = BooleanValidator.validateBoolean("confirm (true/false): ");
+
+        if (confirm) {
+            boolean isActivated = CourseManagementUI.COURSE_SERVICE.activeCourse(this.name);
+            if (isActivated) {
+                PrintSuccess.println("Course: " + this.name + " has been activated");
+            } else {
+                PrintError.println("Can't activate course: " + this.name);
+            }
+        }
+    }
+
 
     public String inputCourseName(){
         return StringValidator.validate("Enter the course name: ", new LengthContain(0, 100));

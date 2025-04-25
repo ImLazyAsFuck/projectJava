@@ -21,7 +21,6 @@ public class Account implements Inputable{
 
     public static Account currentAccount = null;
 
-
     public Account(){
         this.status = AccountStatus.ACTIVE;
         this.role = Role.STUDENT;

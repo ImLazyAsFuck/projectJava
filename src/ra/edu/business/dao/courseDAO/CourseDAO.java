@@ -13,5 +13,9 @@ public interface CourseDAO extends BaseDAO<Course>{
 
     List<Course> sortCourseByName(boolean typeSort);
 
-    boolean isNameUnique(String name);
+    int isNameUnique(String name);
+
+    boolean isCourseExist(String courseName);
+
+    boolean activeCourse(String courseName);
 }

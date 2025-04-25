@@ -20,7 +20,7 @@ public class CourseValidator{
                     throw new IllegalArgumentException("Course length must be at least " + lengthContain.getMinLength() + " characters");
                 }else if(newString.length() > lengthContain.getMaxLength()){
                     throw new IllegalArgumentException("Course length must be less than " + lengthContain.getMaxLength() + " characters");
-                }else if(courseService.isNameUnique(newString)){
+                }else if(courseService.isNameUnique(newString) == 1){
                     throw new IllegalArgumentException("Course name is already in use");
                 }
                 return newString;

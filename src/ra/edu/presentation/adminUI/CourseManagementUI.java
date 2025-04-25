@@ -12,6 +12,9 @@ import ra.edu.utils.Print.PrintSuccess;
 import ra.edu.utils.Print.printColor.PrintColor;
 import ra.edu.validate.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
 import static ra.edu.presentation.adminUI.AdminUI.PAGE_SIZE;
 
@@ -22,17 +25,17 @@ public class CourseManagementUI{
     public static void showCourseMenu() {
         int choice;
         do {
-            System.out.println("+=============================================+");
-            System.out.println("|         COURSE MANAGEMENT SYSTEM            |");
-            System.out.println("+====+========================================+");
-            System.out.println("| 1 | Show all courses                        |");
-            System.out.println("| 2 | Add new course                          |");
-            System.out.println("| 3 | Update course (choose attribute to edit)|");
-            System.out.println("| 4 | Delete course (with confirmation)       |");
-            System.out.println("| 5 | Search by name (have pagination)        |");
-            System.out.println("| 6 | Sort by name (ascending/descending)     |");
-            System.out.println("| 7 | Return to management menu               |");
-            System.out.println("+====+========================================+");
+            PrintColor.printlnYellow("+=============================================+");
+            PrintColor.printlnYellow("|         COURSE MANAGEMENT SYSTEM            |");
+            PrintColor.printlnYellow("+====+========================================+");
+            PrintColor.printlnYellow("| 1 | Show all courses                        |");
+            PrintColor.printlnYellow("| 2 | Add new course                          |");
+            PrintColor.printlnYellow("| 3 | Update course (choose attribute to edit)|");
+            PrintColor.printlnYellow("| 4 | Delete course (with confirmation)       |");
+            PrintColor.printlnYellow("| 5 | Search by name (have pagination)        |");
+            PrintColor.printlnYellow("| 6 | Sort by name (ascending/descending)     |");
+            PrintColor.printlnRed("| 7 | Return to management menu               |");
+            PrintColor.printlnYellow("+====+========================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 7);
 
             System.out.println();
@@ -65,7 +68,8 @@ public class CourseManagementUI{
     }
 
     public static void findbyName() {
-        if(isEmptyOrPrintCourses()){
+        if(COURSE_SERVICE.findAll().isEmpty()){
+            PrintError.println("Course list is empty.");
             return;
         }
         String searchName = StringValidator.validate("Enter search name: ", new LengthContain(0, 100));
@@ -93,41 +97,66 @@ public class CourseManagementUI{
                             course.getDescription(), course.getInstructor(),
                             course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
             );
+            System.out.println("-".repeat(200));
 
-            System.out.printf("Page %d/%d%n", currentPage, totalPage);
             printPagination(currentPage, totalPage);
 
-            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.prev", "2.choose page", "3.next", "4.exit");
-            int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
+            StringBuilder options = new StringBuilder();
+            List<String> validChoices = new ArrayList<>();
 
-            switch (subChoice) {
-                case 1:
+            if (currentPage > AdminUI.FIRST_PAGE) {
+                options.append(String.format("%-20s", "P.Prev"));
+                validChoices.add("1");
+            }
+            if (totalPage > 1) {
+                options.append(String.format("%-20s", "C.Choose"));
+                validChoices.add("2");
+            }
+            if (currentPage < totalPage) {
+                options.append(String.format("%-20s", "N.Next"));
+                validChoices.add("3");
+            }
+            options.append(String.format("%-20s", "E.Exit"));
+            validChoices.add("4");
+
+            System.out.println(options.toString());
+            String subChoice = StringValidator.validate("Enter choice: ", new LengthContain(0, 1));
+            switch (subChoice.toLowerCase()) {
+                case "p":
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
+                        System.out.println();
                         PrintError.println("You are already on the first page.");
+                        System.out.println();
                     }
                     break;
-                case 2:
+                case "c":
+                    System.out.println();
                     int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
                     if (pageChoice >= 1 && pageChoice <= totalPage) {
                         currentPage = pageChoice;
                     } else {
+                        System.out.println();
                         PrintError.println("Invalid page number.");
+                        System.out.println();
                     }
                     break;
-                case 3:
+                case "n":
                     if (currentPage < totalPage) {
                         currentPage++;
                     } else {
                         PrintError.println("You are already on the last page.");
+                        System.out.println();
                     }
                     break;
-                case 4:
+                case "e":
                     PrintSuccess.println("Exiting choice page");
+                    System.out.println();
                     return;
                 default:
-                    PrintError.println("Invalid choice. Please choose between 1, 2, 3 and 4.");
+                    PrintError.println("Invalid choice. Please choose P, C, N and E.");
+                    System.out.println();
             }
         }
     }
@@ -211,14 +240,35 @@ public class CourseManagementUI{
                             course.getDescription(), course.getInstructor(),
                             course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
             );
-            System.out.printf("Page %d/%d%n", currentPage, totalPage);
+            System.out.println("-".repeat(200));
             printPagination(currentPage, totalPage);
 
-            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.Prev", "2.Choose", "3.Next", "4.Exit");
+            if(totalPage <= 1){
+                return;
+            }
+            StringBuilder options = new StringBuilder();
+            List<String> validChoices = new ArrayList<>();
 
-            int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
-            switch (subChoice) {
-                case 1:
+            if (currentPage > AdminUI.FIRST_PAGE) {
+                options.append(String.format("%-20s", "P.Prev"));
+                validChoices.add("1");
+            }
+            if (totalPage > 1) {
+                options.append(String.format("%-20s", "C.Choose"));
+                validChoices.add("2");
+            }
+            if (currentPage < totalPage) {
+                options.append(String.format("%-20s", "N.Next"));
+                validChoices.add("3");
+            }
+            options.append(String.format("%-20s", "E.Exit"));
+            validChoices.add("4");
+
+            System.out.println(options.toString());
+
+            String subChoice = StringValidator.validate("Enter choice: ", new LengthContain(0, 1));
+            switch (subChoice.toLowerCase()) {
+                case "p":
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
@@ -227,7 +277,7 @@ public class CourseManagementUI{
                         System.out.println();
                     }
                     break;
-                case 2:
+                case "c":
                     System.out.println();
                     int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
                     if (pageChoice >= 1 && pageChoice <= totalPage) {
@@ -238,7 +288,7 @@ public class CourseManagementUI{
                         System.out.println();
                     }
                     break;
-                case 3:
+                case "n":
                     if (currentPage < totalPage) {
                         currentPage++;
                     } else {
@@ -246,12 +296,15 @@ public class CourseManagementUI{
                         System.out.println();
                     }
                     break;
-                case 4:
+                case "e":
+                    PrintSuccess.println("");
                     PrintSuccess.println("Exiting choice page");
-                    System.out.println();
+                    PrintSuccess.println("");
                     return;
                 default:
-                    PrintError.println("Invalid choice. Please choose between 1, 2, 3 and 4.");
+                    System.out.println();
+                    PrintError.println("Invalid choice. Please choose P, C, N and E.");
+                    System.out.println();
                     System.out.println();
             }
         }
@@ -298,9 +351,7 @@ public class CourseManagementUI{
         if(COURSE_SERVICE.save(course)){
             System.out.println("Course added.");
             System.out.println();
-        }else{
-            PrintError.println("Course cannot be added because unknown error.");
-        };
+        }
     }
 
     public static void updateCourse() {
@@ -328,27 +379,40 @@ public class CourseManagementUI{
             switch(choice){
                 case 1:
                     course.setName(course.inputCourseName());
-                    PrintSuccess.println("Course name updated.");
+                    if(COURSE_SERVICE.update(course)){
+                        PrintSuccess.println("Course name updated.");
+                    }
                     System.out.println();
                     break;
                 case 2:
                     course.setDuration(course.inputCourseDuration());
-                    PrintSuccess.println("Course duration updated.");
+                    if(COURSE_SERVICE.update(course)){
+                        PrintSuccess.println("Course duration updated.");
+                    }else{
+                        PrintError.println("Course description could not be updated.");
+                    }
                     System.out.println();
                     break;
                 case 3:
                     course.setDescription(course.inputCourseDescription());
-                    PrintSuccess.println("Course description updated");
+                    if(COURSE_SERVICE.update(course)){
+                        PrintSuccess.println("Course description updated");
+                    }else{
+                        PrintError.println("Course description could not be updated.");
+                    }
                     System.out.println();
                     break;
                 case 4:
                     course.setInstructor(course.inputCourseInstructor());
-                    PrintSuccess.println("Course instructor updated.");
+                    if(COURSE_SERVICE.update(course)){
+                        PrintSuccess.println("Course instructor updated.");
+                    }else{
+                        PrintError.println("Course description could not be updated.");
+                    }
                     System.out.println();
                     break;
                 case 5:
                     System.out.println("Goodbye!");
-                    COURSE_SERVICE.update(course);
                     System.out.println();
                     return;
                 default:
@@ -373,6 +437,7 @@ public class CourseManagementUI{
                         course.getDescription(), course.getInstructor(),
                         course.getCreatedAt() != null ? course.getCreatedAt().toString() : "N/A")
         );
+        System.out.println("-".repeat(200));
         System.out.println();
     }
 

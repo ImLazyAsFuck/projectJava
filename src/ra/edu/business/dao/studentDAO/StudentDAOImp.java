@@ -43,9 +43,9 @@ public class StudentDAOImp implements StudentDAO{
             }
 
         }catch(SQLException e){
-            PrintError.println("SQL Error while finding student by id: " + e.getMessage());
+            PrintError.println("SQL Error while finding student by id");
         }catch(Exception e){
-            PrintError.println("Unknown Error while finding student by id: " + e.getMessage());
+            PrintError.println("Unknown Error while finding student by id");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -91,9 +91,9 @@ public class StudentDAOImp implements StudentDAO{
             pagination.setPageSize(size);
             pagination.setItems(list);
         }catch(SQLException e){
-            PrintError.println("Error while finding students by name: " + e.getMessage());
+            PrintError.println("Error while finding students by name");
         }catch(Exception e){
-            PrintError.println("Unknown error while finding students by name: " + e.getMessage());
+            PrintError.println("Unknown error while finding students by name");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -135,13 +135,12 @@ public class StudentDAOImp implements StudentDAO{
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-//            pagination.setCurrentPage(page);
             pagination.setPageSize(size);
             pagination.setItems(list);
         }catch(SQLException e){
-            PrintError.println("Error while finding students by email: " + e.getMessage());
+            PrintError.println("Error while finding students by email");
         }catch(Exception e){
-            PrintError.println("Unknown error while finding students by email: " + e.getMessage());
+            PrintError.println("Unknown error while finding students by email");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -165,9 +164,9 @@ public class StudentDAOImp implements StudentDAO{
                 return count > 0;
             }
         }catch(SQLException e){
-            PrintError.println("Error while checking email existence" + e.getMessage());
+            PrintError.println("Error while checking email existen");
         } catch (Exception e) {
-            PrintError.println("Unknown Error while checking if email exists: " + e.getMessage());
+            PrintError.println("Unknown Error while checking if email exists");
         } finally {
             ConnectionDB.closeConnection(con, cs);
         }
@@ -197,9 +196,9 @@ public class StudentDAOImp implements StudentDAO{
             }
             return list;
         }catch(SQLException e){
-            PrintError.println("Error while checking if all students are found: " + e.getMessage());
+            PrintError.println("Error while checking if all students are found");
         }catch(Exception e){
-            PrintError.println("Unknown Error while checking if all students are found: " + e.getMessage());
+            PrintError.println("Unknown Error while checking if all students are found");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -226,9 +225,9 @@ public class StudentDAOImp implements StudentDAO{
             cs.executeUpdate();
             return true;
         } catch(SQLException e) {
-            PrintError.println("Error while saving student: " + e.getMessage());
+            PrintError.println("Error while saving student");
         } catch(RuntimeException e) {
-            PrintError.println("Unknown error while saving student: " + e.getMessage());
+            PrintError.println("Unknown error while saving student");
         } finally {
             ConnectionDB.closeConnection(con, cs);
         }
@@ -256,9 +255,9 @@ public class StudentDAOImp implements StudentDAO{
                 return true;
             }
         }catch(SQLException e){
-            PrintError.println("Error while unlocking student: " + e.getMessage());
+            PrintError.println("Error while unlocking student");
         }catch(Exception e){
-            PrintError.println("Unknown error while unlocking student: " + e.getMessage());
+            PrintError.println("Unknown error while unlocking student");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -286,9 +285,9 @@ public class StudentDAOImp implements StudentDAO{
                 return true;
             }
         }catch(SQLException e){
-            PrintError.println("Error while checking if student is locked: " + e.getMessage());
+            PrintError.println("Error while checking if student is locked");
         }catch(Exception e){
-            PrintError.println("Unknown error while checking if student is locked: " + e.getMessage());
+            PrintError.println("Unknown error while checking if student is locked");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -316,9 +315,9 @@ public class StudentDAOImp implements StudentDAO{
             }
             return list;
         }catch(SQLException e){
-            PrintError.println("Error while sorting student: " + e.getMessage());
+            PrintError.println("Error while sorting student");
         }catch(Exception e){
-            PrintError.println("Unknown error while sorting student: " + e.getMessage());
+            PrintError.println("Unknown error while sorting student");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -346,9 +345,9 @@ public class StudentDAOImp implements StudentDAO{
             }
             return list;
         }catch(SQLException e){
-            PrintError.println("Error while sorting student: " + e.getMessage());
+            PrintError.println("Error while sorting student");
         }catch(Exception e){
-            PrintError.println("Unknown error while sorting student: " + e.getMessage());
+            PrintError.println("Unknown error while sorting student");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -371,8 +370,7 @@ public class StudentDAOImp implements StudentDAO{
                 studentId = rs.getInt("s_id");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error executing find_student_by_acc_id: " + e.getMessage());
+            PrintError.println("Error while finding student by id");
         } finally {
             ConnectionDB.closeConnection(con, cs);
         }
@@ -395,10 +393,10 @@ public class StudentDAOImp implements StudentDAO{
             cs.executeUpdate();
             return true;
         }catch(SQLException e){
-            PrintError.println("Error while updating student: " + e.getMessage());
+            PrintError.println("Error while updating student");
             return false;
         }catch(Exception e){
-            PrintError.println("Unknown error while updating student: " + e.getMessage());
+            PrintError.println("Unknown error while updating student");
             return false;
         }finally{
             ConnectionDB.closeConnection(con, cs);
@@ -421,9 +419,9 @@ public class StudentDAOImp implements StudentDAO{
                 return true;
             }
         }catch(SQLException e){
-            PrintError.println("Error while blocking student: " + e.getMessage());
+            PrintError.println("Error while blocking student.");
         }catch(Exception e){
-            PrintError.println("Unknown error blocking deleting student: " + e.getMessage());
+            PrintError.println("Unknown error blocking deleting student");
         }finally{
             ConnectionDB.closeConnection(con, cs);
         }
@@ -443,9 +441,7 @@ public class StudentDAOImp implements StudentDAO{
             cs.setInt(1, page);
             cs.setInt(2, size);
             cs.registerOutParameter(3, Types.INTEGER);
-
             rs = cs.executeQuery();
-
             while (rs.next()) {
                 Student s = new Student();
                 s.setId(rs.getInt("s_id"));
@@ -468,14 +464,13 @@ public class StudentDAOImp implements StudentDAO{
 
             pagination.setTotalItems(totalItems);
             pagination.setTotalPages(totalPages);
-//            pagination.setCurrentPage(page);
             pagination.setPageSize(size);
             pagination.setItems(list);
             return pagination;
         } catch(SQLException e) {
-            PrintError.println("Error while fetching students: " + e.getMessage());
+            PrintError.println("Error while fetching students");
         } catch(Exception e) {
-            PrintError.println("Unknown error while fetching students: " + e.getMessage());
+            PrintError.println("Unknown error while fetching students.");
         } finally {
             ConnectionDB.closeConnection(con, cs);
         }

@@ -28,7 +28,7 @@ create table course (
                         c_name varchar(100) not null unique,
                         c_duration int not null,
                         c_description varchar(255),
-                        c_status enum('ACTIVE', 'INACTIVE', 'DELETE'),
+                        c_status enum('ACTIVE', 'DELETED'),
                         c_instructor varchar(100) not null,
                         c_created_at datetime default(current_timestamp)
 );
@@ -36,7 +36,7 @@ create table course (
 drop table if exists enrollment;
 create table enrollment (
                             e_id int primary key auto_increment,
-                            s_id int not null unique,
+                            s_id int not null,
                             c_id int not null,
                             e_status enum('WAITING', 'DENIED', 'CANCER', 'CONFIRMED') default 'WAITING',
                             e_registered_at datetime default current_timestamp,

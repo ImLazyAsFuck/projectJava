@@ -120,9 +120,9 @@ public class AuthDAOImp implements AuthDAO{
             account.setPassword(cs.getString(6));
 
         } catch (SQLException e) {
-            PrintError.println("Error while changing password: " + e.getMessage());
+            PrintError.println("Error while changing password");
         } catch (Exception e) {
-            PrintError.println("Unknown error while changing password: " + e.getMessage());
+            PrintError.println("Unknown error while changing password");
         } finally {
             ConnectionDB.closeConnection(con, cs);
         }

@@ -9,6 +9,12 @@ import java.util.List;
 
 public class CourseServiceImp implements CourseService {
     private final static CourseDAO COURSE_DAO = new CourseDaoImp();
+
+    @Override
+    public boolean activeCourse(String courseName){
+        return COURSE_DAO.activeCourse(courseName);
+    }
+
     @Override
     public Course findbyId(int id){
         return COURSE_DAO.findbyId(id);
@@ -25,7 +31,7 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public boolean isNameUnique(String name){
+    public int isNameUnique(String name){
         return COURSE_DAO.isNameUnique(name);
     }
 

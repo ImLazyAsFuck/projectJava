@@ -5,9 +5,14 @@
     <file url="file://$PROJECT_DIR$/src/ra/edu/business/dao/authDAO/AuthDAOImp.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/ra/edu/business/dao/courseDAO/CourseDaoImp.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/ra/edu/business/dao/studentDAO/StudentDAOImp.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/sql/courseTest.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/sql/run1_5/01_create_tables.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/sql/run1_5/02_auth_management.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/sql/run1_5/05_enrollment_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/run1-6/01_create_tables.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/run1-6/02_auth_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/run1-6/03_course_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/run1-6/04_student_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/run1-6/05_enrollment_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/run1-6/06_statistic_management.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/sample_data/courseTest.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/sample_data/enrollmentTest.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sql/sample_data/studentTest.sql" dialect="MySQL" />
   </component>
 </project>

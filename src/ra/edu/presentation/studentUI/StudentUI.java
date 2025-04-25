@@ -21,16 +21,16 @@ public class StudentUI{
                 PrintError.println("Please login first!");
                 return;
             }
-            System.out.println("\n+=============================================================+");
-            System.out.println("|                         STUDENT MENU                        |");
-            System.out.println("+====+========================================================+");
-            System.out.println("| 1. | View the list of courses                               |");
-            System.out.println("| 2. | Register for a course                                  |");
-            System.out.println("| 3. | View registered courses                                |");
-            System.out.println("| 4. | Cancel registration (if not yet started)               |");
-            System.out.println("| 5. | Change password                                        |");
-            System.out.println("| 6. | Log out                                                |");
-            System.out.println("+====+========================================================+");
+            PrintColor.printlnPurple("\n+=============================================================+");
+            PrintColor.printlnPurple("|                         STUDENT MENU                        |");
+            PrintColor.printlnPurple("+====+========================================================+");
+            PrintColor.printlnPurple("| 1. | View the list of courses                               |");
+            PrintColor.printlnPurple("| 2. | Register for a course                                  |");
+            PrintColor.printlnPurple("| 3. | View registered courses                                |");
+            PrintColor.printlnPurple("| 4. | Cancel registration (if not yet started)               |");
+            PrintColor.printlnPurple("| 5. | Change password                                        |");
+            PrintError.println("| 6. | Log out                                                |");
+            PrintColor.printlnPurple("+====+========================================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 6);
             System.out.println();
             switch (choice) {
@@ -94,7 +94,7 @@ public class StudentUI{
         }
         displayRegisterCourse();
         int courseId =  IntegerValidator.validate("Enter course Id: ", new LengthContain(0, 1000));
-        if(CourseRegistrationUI.ENROLLMENT_SERVICE.removeStudentFromEnrollment(courseId, studentId)){
+        if(CourseRegistrationUI.ENROLLMENT_SERVICE.studentCancelfromEnrollment(courseId, studentId)){
             PrintSuccess.println("You has been successfully removed!");
             System.out.println();
         }else{

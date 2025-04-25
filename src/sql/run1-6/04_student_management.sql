@@ -94,30 +94,38 @@ end;
 delimiter //
 
 delimiter //
-
+drop procedure if exists delete_student;
 create procedure delete_student(
     in id int,
     out return_code int
 )
 begin
     declare account_id int default null;
+    declare enrollment_count int default 0;
 
-    select a_id into account_id
+    select a_id
+    into account_id
     from student
     where a_id = id;
 
-    if account_id is not null then
+    select count(*)
+    into enrollment_count
+    from enrollment e
+             join student s on e.s_id = s.s_id
+    where s.a_id = id and e_status = 'CONFIRMED';
+
+    if account_id is null then
+        set return_code = 1;
+    elseif enrollment_count > 0 then
+        set return_code = 2;
+    else
         update account set a_status = 'BLOCKED' where a_id = account_id;
         set return_code = 0;
-    else
-        set return_code = 1;
     end if;
 end;
-
 delimiter //
 
 delimiter //
-
 create procedure unblock_student(
     in id int,
     out return_code int
@@ -136,7 +144,6 @@ begin
         set return_code = 1;
     end if;
 end;
-
 delimiter //
 
 delimiter //
@@ -236,13 +243,17 @@ drop procedure if exists sort_student_by_email;
 create procedure sort_student_by_email(type_sort bit)
 begin
     if type_sort = 0 then
-        select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
-        from student
-        order by s_email asc;
+        select s.s_id, s.s_full_name, s.s_dob, s.s_email, s.s_sex, s.s_phone, s.s_created_at
+        from student s
+                 join account a on s.a_id = a.a_id
+        where a.a_status = 'ACTIVE'
+        order by s.s_email asc;
     elseif type_sort = 1 then
-        select s_id, s_full_name, s_dob, s_email, s_sex, s_phone, s_created_at
-        from student
-        order by s_email desc;
+        select s.s_id, s.s_full_name, s.s_dob, s.s_email, s.s_sex, s.s_phone, s.s_created_at
+        from student s
+                 join account a on s.a_id = a.a_id
+        where a.a_status = 'ACTIVE'
+        order by s.s_email desc;
     end if;
 end;
 delimiter //

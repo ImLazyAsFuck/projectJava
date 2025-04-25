@@ -13,6 +13,10 @@ import ra.edu.utils.Print.printColor.PrintColor;
 import ra.edu.validate.BooleanValidator;
 import ra.edu.validate.ChoiceValidator;
 import ra.edu.validate.IntegerValidator;
+import ra.edu.validate.StringValidator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ra.edu.presentation.adminUI.AdminUI.FIRST_PAGE;
 import static ra.edu.presentation.adminUI.AdminUI.PAGE_SIZE;
@@ -26,15 +30,15 @@ public class CourseRegistrationUI{
     public static void courseRegistrationMenu() {
         int choice;
         do {
-            System.out.println("+===========================================================+");
-            System.out.println("|           COURSE REGISTRATION MANAGEMENT MENU            |");
-            System.out.println("+====+=====================================================+");
-            System.out.println("| 1. | Display students by each course                     |");
-            System.out.println("| 2. | Add a student to a course                           |");
-            System.out.println("| 3. | Remove a student from a course                      |");
-            System.out.println("| 4. | Approve or reject student registrations             |");
-            System.out.println("| 5. | Return to main menu                                 |");
-            System.out.println("+====+=====================================================+");
+            PrintColor.printlnYellow("+=============================================================+");
+            PrintColor.printlnYellow("|             COURSE REGISTRATION MANAGEMENT MENU             |");
+            PrintColor.printlnYellow("+====+========================================================+");
+            PrintColor.printlnYellow("| 1. | Display students by each course                        |");
+            PrintColor.printlnYellow("| 2. | Add a student to a course                              |");
+            PrintColor.printlnYellow("| 3. | Remove a student from a course (if haven't registered) |");
+            PrintColor.printlnYellow("| 4. | Approve or reject student registrations                |");
+            PrintColor.printlnRed("| 5. | Return to main menu                                    |");
+            PrintColor.printlnYellow("+====+=====================================================+");
             choice = ChoiceValidator.validateChoice("Enter choice: ", 5);
             System.out.println();
             switch (choice) {
@@ -48,7 +52,7 @@ public class CourseRegistrationUI{
                     removeStudentFromCourse();
                     break;
                 case 4:
-                    approveOrRejectStudentRegistration();
+                    approveStudentRegistration();
                     break;
                 case 5:
                     PrintColor.printCyan("Returning to main menu");
@@ -133,11 +137,12 @@ public class CourseRegistrationUI{
             return;
         }
 
-        int courseId = IntegerValidator.validate("Enter the student Id: ", new LengthContain(0, 1000));
+        int courseId = IntegerValidator.validate("Enter the course Id: ", new LengthContain(0, 1000));
         if(COURSE_SERVICE.findbyId(courseId) == null){
             PrintError.println("Not found course with id: " + courseId);
             return;
         }
+
 
         Pagination<Student> firstPage = ENROLLMENT_SERVICE.studentByCourse(courseId, FIRST_PAGE, PAGE_SIZE);
         if(firstPage.getItems().isEmpty()){
@@ -166,41 +171,64 @@ public class CourseRegistrationUI{
                         student.getCreatedAt() != null? student.getCreatedAt().toString() : "N/A"
                 );
             });
+            System.out.println("-".repeat(200));
 
-            System.out.printf("Page %d/%d%n", currentPage, totalPage);
             StudentManagementUI.printPagination(currentPage, totalPage);
-            System.out.printf("%-20s%-20s%-20s%-20s\n", "1.Prev", "2.Choose", "3.Next", "4.Exit");
-            int subChoice = ChoiceValidator.validateChoice("Enter choice: ", 4);
-            switch(subChoice){
-                case 1:
-                    if(currentPage > 1){
+
+            if(totalPage <= 1){
+                return;
+            }
+            StringBuilder options = new StringBuilder();
+            List<String> validChoices = new ArrayList<>();
+
+            if (currentPage > AdminUI.FIRST_PAGE) {
+                options.append(String.format("%-20s", "P.Prev"));
+                validChoices.add("1");
+            }
+            if (totalPage > 1) {
+                options.append(String.format("%-20s", "C.Choose"));
+                validChoices.add("2");
+            }
+            if (currentPage < totalPage) {
+                options.append(String.format("%-20s", "N.Next"));
+                validChoices.add("3");
+            }
+            options.append(String.format("%-20s", "E.Exit"));
+            validChoices.add("4");
+
+            System.out.println(options.toString());
+
+            String subChoice = StringValidator.validate("Enter choice: ", new LengthContain(0, 1));
+            switch (subChoice.toLowerCase()) {
+                case "p":
+                    if (currentPage > 1) {
                         currentPage--;
-                    }else{
+                    } else {
                         System.out.println();
                         PrintError.println("You are already on the first page.");
                         System.out.println();
                     }
                     break;
-                case 2:
+                case "c":
                     System.out.println();
                     int pageChoice = IntegerValidator.validate("Enter your page: ", new LengthContain(0, 1000));
-                    if(pageChoice >= 1 && pageChoice <= totalPage){
+                    if (pageChoice >= 1 && pageChoice <= totalPage) {
                         currentPage = pageChoice;
-                    }else{
+                    } else {
                         System.out.println();
                         PrintError.println("Invalid page number.");
                         System.out.println();
                     }
                     break;
-                case 3:
-                    if(currentPage < totalPage){
+                case "n":
+                    if (currentPage < totalPage) {
                         currentPage++;
-                    }else{
+                    } else {
                         PrintError.println("You are already on the last page.");
                         System.out.println();
                     }
                     break;
-                case 4:
+                case "e":
                     PrintSuccess.println("Exiting choice page");
                     System.out.println();
                     return;
@@ -211,7 +239,7 @@ public class CourseRegistrationUI{
         }
     }
     
-    public static void approveOrRejectStudentRegistration(){
+    public static void approveStudentRegistration(){
         if(isEmptyOrPrintCourses()){
             return;
         }
@@ -244,7 +272,7 @@ public class CourseRegistrationUI{
             );
         });
 
-        int studentId = IntegerValidator.validate("Enter student Id to approve/reject: ", new LengthContain(0, 1000));
+        int studentId = IntegerValidator.validate("Enter student Id to approve: ", new LengthContain(0, 1000));
         if(STUDENT_SERVICE.findById(studentId) == null){
             PrintError.println("Not found student");
             return;
@@ -255,7 +283,7 @@ public class CourseRegistrationUI{
             if(approve){
                 PrintSuccess.println("Student registration has been approved!");
             }else{
-                PrintSuccess.println("Student registration has been rejected!");
+                PrintSuccess.println("Cancelled student registration approval!");
             }
         }
         System.out.println();

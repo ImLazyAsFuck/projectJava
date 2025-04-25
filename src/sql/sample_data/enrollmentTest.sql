@@ -1,0 +1,22 @@
+
+INSERT INTO enrollment (s_id, c_id, e_status) VALUES
+(1, 1, 'WAITING'),
+(2, 1, 'WAITING'),
+(3, 1, 'WAITING'),
+(4, 1, 'WAITING'),
+(5, 1, 'WAITING'),
+(6, 1, 'WAITING'),
+(7, 1, 'WAITING'),
+(8, 1, 'WAITING'),
+(9, 1, 'WAITING'),
+(10, 1, 'WAITING'),
+(11, 1, 'WAITING'),
+(12, 1, 'WAITING'),
+(13, 1, 'WAITING'),
+(14, 1, 'WAITING'),
+(15, 1, 'WAITING'),
+(16, 1, 'WAITING'),
+(17, 1, 'WAITING'),
+(18, 1, 'WAITING'),
+(19, 1, 'WAITING'),
+(20, 1, 'WAITING');

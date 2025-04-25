@@ -33,9 +33,9 @@ public class CourseDaoImp implements CourseDAO {
                 }
             }
         } catch (SQLException e) {
-            PrintError.println("Error while finding course by name: " + e.getMessage());
+            PrintError.println("Error while finding course by name");
         }catch(Exception e){
-            PrintError.println("Unknown error while saving course: " + e.getMessage());
+            PrintError.println("Unknown error while saving course");
         }
         ConnectionDB.closeConnection(con, cs);
         return course;
@@ -95,9 +95,9 @@ public class CourseDaoImp implements CourseDAO {
             pagination.setItems(list);
 
         } catch (SQLException e) {
-            PrintError.println("Error while fetching course page: " + e.getMessage());
+            PrintError.println("Error while fetching course page: ");
         } catch (Exception e) {
-            PrintError.println("Unknown error while fetching course page: " + e.getMessage());
+            PrintError.println("Unknown error while fetching course page: ");
         }
 
         return pagination;
@@ -130,34 +130,61 @@ public class CourseDaoImp implements CourseDAO {
                 list.add(course);
             }
         } catch (SQLException e) {
-            PrintError.println("Error while fetching all courses: " + e.getMessage());
+            PrintError.println("Error while fetching all courses: ");
         }catch(Exception e){
-            PrintError.println("Unknown error while saving course: " + e.getMessage());
+            PrintError.println("Unknown error while saving course: ");
         }
         ConnectionDB.closeConnection(con, cs);
         return list;
     }
 
     @Override
-    public boolean isNameUnique(String name){
+    public int isNameUnique(String name){
         Connection con = null;
         CallableStatement cs = null;
         try{
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call is_name_unique(?)}");
+            cs = con.prepareCall("{call is_course_name_unique(?, ?)}");
             cs.setString(1, name);
+            cs.registerOutParameter(2, Types.INTEGER);
+            cs.execute();
+            return cs.getInt(2);
+        }catch(SQLException e){
+            PrintError.println("Error while fetching course name");
+        }catch(Exception e){
+            PrintError.println("Unknown error while fetching course name");
+        }finally{
+            ConnectionDB.closeConnection(con, cs);
+        }
+        return 1;
+    }
+
+    @Override
+    public boolean isCourseExist(String courseName){
+        return false;
+    }
+
+    @Override
+    public boolean activeCourse(String courseName){
+        Connection con = null;
+        CallableStatement cs = null;
+        try{
+            con = ConnectionDB.openConnection();
+            cs = con.prepareCall("{call active_back_the_course(?)}");
             ResultSet rs = cs.executeQuery();
-            if (rs.next()) {
+            if(rs.next()){
                 return true;
             }
-            ConnectionDB.closeConnection(con, cs);
         }catch(SQLException e){
-            PrintError.println("Error while fetching course name: " + e.getMessage());
+            PrintError.println("Error while fetching course name.");
         }catch(Exception e){
-            PrintError.println("Unknown error while fetching course name: " + e.getMessage());
+            PrintError.println("Unknown error while fetching course name.");
+        }finally{
+            ConnectionDB.closeConnection(con, cs);
         }
         return false;
     }
+
 
     @Override
     public List<Course> findAll() {
@@ -184,9 +211,9 @@ public class CourseDaoImp implements CourseDAO {
                 list.add(course);
             }
         } catch (SQLException e) {
-            PrintError.println("Error while fetching all courses: " + e.getMessage());
+            PrintError.println("Error while fetching all courses");
         }catch(Exception e){
-            PrintError.println("Unknown error while saving course: " + e.getMessage());
+            PrintError.println("Unknown error while saving course");
         }
         ConnectionDB.closeConnection(con, cs);
         return list;
@@ -198,21 +225,29 @@ public class CourseDaoImp implements CourseDAO {
         CallableStatement cs = null;
         try {
             con = ConnectionDB.openConnection();
-            cs = con.prepareCall("{call insert_course(?, ?, ?, ?)}");
+            cs = con.prepareCall("{call insert_course(?, ?, ?, ?, ?)}");
             cs.setString(1, course.getName());
             cs.setInt(2, course.getDuration());
             cs.setString(3, course.getDescription());
             cs.setString(4, course.getInstructor());
+            cs.registerOutParameter(5, Types.INTEGER);
 
             cs.executeUpdate();
-            ConnectionDB.closeConnection(con, cs);
-            return true;
+            if(cs.getInt(5) == 0){
+                return true;
+            }else if(cs.getInt(5) == 1){
+                PrintError.println("Some course name is duplicate");
+            }
+            PrintError.println("Unknown error while saving course.");
+            return false;
         } catch (SQLException e) {
-            PrintError.println("Error while saving course: " + e.getMessage());
+            PrintError.println("Error while saving course.");
             return false;
         } catch(Exception e){
-            PrintError.println("Unknown error while saving course: " + e.getMessage());
+            PrintError.println("Unknown error while saving course.");
             return false;
+        }finally{
+            ConnectionDB.closeConnection(con, cs);
         }
     }
 
@@ -234,16 +269,15 @@ public class CourseDaoImp implements CourseDAO {
             cs.execute();
             int returnCode = cs.getInt(6);
             if(returnCode == 1){
-                System.out.println("Some course name is duplicate");
+                PrintError.println("Course name is conflict with different course");
             }else if(returnCode == 2){
-                System.out.println("Not found course");
+                PrintError.println("Not found course");
             }
             return returnCode == 0;
-
         } catch (SQLException e) {
-            PrintError.println("Error while updating course: " + e.getMessage());
+            PrintError.println("Error while updating course");
         }catch(Exception e){
-            PrintError.println("Unknown error while saving course: " + e.getMessage());
+            PrintError.println("Unknown error while saving course");
         }
         ConnectionDB.closeConnection(con, cs);
         return false;
@@ -275,10 +309,10 @@ public class CourseDaoImp implements CourseDAO {
             ConnectionDB.closeConnection(con, cs);
             return false;
         } catch (SQLException e) {
-            PrintError.println("Error while delete course " + e.getMessage());
+            PrintError.println("Error while delete course ");
             return false;
         } catch (Exception e) {
-            PrintError.println("Unknown error while delete course " + e.getMessage());
+            PrintError.println("Unknown error while delete course ");
             return false;
         }
     }
@@ -331,9 +365,9 @@ public class CourseDaoImp implements CourseDAO {
             pagination.setItems(list);
 
         } catch (SQLException e) {
-            PrintError.println("Error while fetching course page: " + e.getMessage());
+            PrintError.println("Error while fetching course page");
         }catch(Exception e){
-            PrintError.println("Unknown error while fetching course page: " + e.getMessage());
+            PrintError.println("Unknown error while fetching course page");
         }
         ConnectionDB.closeConnection(con, cs);
         return pagination;

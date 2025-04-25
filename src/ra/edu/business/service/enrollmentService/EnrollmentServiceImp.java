@@ -51,4 +51,9 @@ public class EnrollmentServiceImp implements EnrollmentService {
     public boolean approveStudent(int courseId, int studentId){
         return ENROLLMENT_DAO.approveStudent(courseId, studentId);
     }
+
+    @Override
+    public boolean studentCancelfromEnrollment(int courseId, int studentId){
+        return ENROLLMENT_DAO.studentCancelfromEnrollment(courseId, studentId);
+    }
 }

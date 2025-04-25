@@ -18,13 +18,13 @@ public class LoginUI{
     public static void displayLoginMenu(){
         int choice;
         do {
-            System.out.println("+==============================================+");
-            System.out.println("|         TRAINING MANAGEMENT SYSTEM           |");
-            System.out.println("+====+=========================================+");
-            System.out.println("| 1. | Login as Administrator                  |");
-            System.out.println("| 2. | Login as Student                        |");
-            System.out.println("| 3. | Exit                                    |");
-            System.out.println("+====+=========================================+");
+            PrintColor.printlnGreen("+==============================================+");
+            PrintColor.printlnGreen("|         TRAINING MANAGEMENT SYSTEM           |");
+            PrintColor.printlnGreen("+====+=========================================+");
+            PrintColor.printlnGreen("| 1. | Login as Administrator                  |");
+            PrintColor.printlnGreen("| 2. | Login as Student                        |");
+            PrintColor.printlnRed("| 3. | Exit                                    |");
+            PrintColor.printlnGreen("+====+=========================================+");
             choice = ChoiceValidator.validateChoice("Enter your choice: ", 3);
             System.out.println();
             switch (choice) {
@@ -45,46 +45,54 @@ public class LoginUI{
     }
 
     public static void loginAsAdmin() {
-        System.out.println("+============================+");
-        System.out.println("|      ADMIN LOGIN FORM      |");
-        System.out.println("+============================+");
-        String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
+        PrintColor.printlnGreen("+============================+");
+        PrintColor.printlnGreen("|      ADMIN LOGIN FORM      |");
+        PrintColor.printlnGreen("+============================+");
+        String username = StringValidator.validate( "Enter username: ", new LengthContain(0, 255));
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
 
         Account account = AUTH_SERVICE.loginAsAdmin(username, password);
         Account.currentAccount = account;
         if (account != null) {
-            System.out.println("\n+----------------------------+");
-            PrintSuccess.println(" Logged in successfully! ");
-            System.out.println("+----------------------------+\n");
+            welcomeTheAccount();
             AdminUI.showAdminMenu();
         } else {
-            System.out.println("\n+----------------------------+");
-            PrintError.println(" Incorrect username or password! ");
-            System.out.println("+----------------------------+\n");
+            PrintError.println("\n+--------------------------------+");
+            PrintError.println("| Incorrect username or password! |");
+            PrintError.println("+--------------------------------+\n");
+            System.out.println();
         }
     }
 
 
     public static void loginAsStudent() {
-        System.out.println("+=============================+");
-        System.out.println("|     STUDENT LOGIN FORM      |");
-        System.out.println("+=============================+");
+        PrintColor.printlnBlue("+=============================+");
+        PrintColor.printlnBlue("|     STUDENT LOGIN FORM      |");
+        PrintColor.printlnBlue("+=============================+");
         String username = StringValidator.validate("Enter username: ", new LengthContain(0, 255));
         String password = StringValidator.validate("Enter password: ", new LengthContain(0, 255));
 
         Account account = AUTH_SERVICE.loginAsStudent(username, password);
         Account.currentAccount = account;
         if (account != null) {
-            System.out.println("\n+-----------------------------+");
-            PrintSuccess.println(" Logged in successfully! ");
-            System.out.println("+-----------------------------+");
+            welcomeTheAccount();
             StudentUI.studentMainMenu();
         } else {
-            System.out.println("\n+-----------------------------+");
-            PrintError.println(" Incorrect username or password! ");
-            System.out.println("+-----------------------------+");
+            PrintError.println("\n+-------------------------------+");
+            PrintError.println("| Incorrect username or password! |");
+            PrintError.println("+-------------------------------+");
+            System.out.println();
         }
+    }
+
+    private static void welcomeTheAccount(){
+        String message = "Welcome, " + Account.currentAccount.getUsername() + " has successfully logged in.";
+        int width = 80;
+        int padding = (width - 2 - message.length()) / 2;
+        String centered = "|" + " ".repeat(padding) + message + " ".repeat(width - 2 - padding - message.length()) + "|";
+        PrintSuccess.println("\n+" + "-".repeat(width - 2) + "+");
+        PrintSuccess.println(centered);
+        PrintSuccess.println("+" + "-".repeat(width - 2) + "+\n");
     }
 
 }
