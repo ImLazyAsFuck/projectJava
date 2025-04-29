@@ -371,8 +371,8 @@ public class CourseManagementUI{
         while(true){
             System.out.println("============== Update Course Menu ==============");
             System.out.println("| 1. | Update name                              |");
-            System.out.println("| 2. | Update description                       |");
-            System.out.println("| 3. | Update duration                          |");
+            System.out.println("| 2. | Update duration                          |");
+            System.out.println("| 3. | Update description                       |");
             System.out.println("| 4. | Update instructor                        |");
             System.out.println("| 5. | Exit                                     |");
             System.out.println("===============================================");
